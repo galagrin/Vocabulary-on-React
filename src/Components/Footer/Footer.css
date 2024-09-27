@@ -1,0 +1,15 @@
+.footer {
+    background-color: #859e9b;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.footerlogo {
+    width: 150px;
+}
+.footername {
+    color: #58362d;
+    font-size: 24px;
+    font-family: "MightyKingdom";
+}

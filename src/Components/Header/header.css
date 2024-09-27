@@ -1,0 +1,15 @@
+.header {
+    background-color: #859e9b;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+.headerlogo {
+    width: 150px;
+}
+.headername {
+    color: #58362d;
+    font-size: 28px;
+    font-family: "MightyKingdom";
+}
