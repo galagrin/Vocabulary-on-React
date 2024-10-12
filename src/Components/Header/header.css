@@ -2,7 +2,12 @@
     background-color: #859e9b;
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px 0 0;
+}
+.logowrapper {
+    display: flex;
     align-items: center;
 }
 .headerlogo {
@@ -11,5 +16,35 @@
 .headername {
     color: #58362d;
     font-size: 28px;
-    font-family: "MightyKingdom";
+    font-family: 'MightyKingdom';
+}
+.headernav {
+    text-align: right;
+}
+.navlist {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.navlist {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navlist li a {
+    text-decoration: none;
+    color: #58362d;
+    font-family: 'NunitoSans';
+    font-size: 20px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.navlist li a:hover {
+    color: #faf4e8;
+    text-shadow: 0 15px 2px #58362d8d;
 }
