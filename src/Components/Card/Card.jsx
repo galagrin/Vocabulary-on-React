@@ -6,6 +6,7 @@ function Card(props) {
     const handleClick = () => {
         setFlipped(!flipped);
     };
+
     const { english, transcription, russian, rollout } = props;
 
     return (
@@ -29,10 +30,5 @@ function Card(props) {
         </div>
     );
 }
-Card.defaultProps = {
-    id: '17157',
-    english: 'blue',
-    transcription: '[bluː]',
-    russian: 'синий',
-};
+
 export default Card;

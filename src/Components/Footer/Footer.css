@@ -4,6 +4,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    flex: 0 0 auto;
 }
 .footerlogo {
     width: 150px;
@@ -11,5 +12,5 @@
 .footername {
     color: #58362d;
     font-size: 24px;
-    font-family: "MightyKingdom";
+    font-family: 'MightyKingdom';
 }

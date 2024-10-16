@@ -1,10 +1,15 @@
 .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background-color: #859e9b;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 0 30px 0 0;
+    z-index: 100;
 }
 .logowrapper {
     display: flex;
@@ -21,13 +26,7 @@
 .headernav {
     text-align: right;
 }
-.navlist {
-    display: flex;
-    gap: 20px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
+
 .navlist {
     display: flex;
     gap: 30px;
@@ -36,7 +35,7 @@
     padding: 0;
 }
 
-.navlist li a {
+.link {
     text-decoration: none;
     color: #58362d;
     font-family: 'NunitoSans';
@@ -44,7 +43,44 @@
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-.navlist li a:hover {
+.link:hover {
     color: #faf4e8;
     text-shadow: 0 15px 2px #58362d8d;
+}
+
+.active {
+    color: #d0c4c8;
+}
+
+.menu-icon {
+    display: none;
+}
+
+@media (max-width: 950px) {
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+
+    .navlist {
+        position: absolute;
+        right: 0;
+        top: 150px;
+        background-color: #859e9bf0;
+        width: 0;
+        height: calc(100vh - 60px);
+        transition: all 0.3s ease-in;
+        overflow: hidden;
+        flex-direction: column; /* Вертикальное расположение элементов */
+    }
+
+    .navlist.active {
+        width: 270px;
+    }
+
+    .navlist li {
+        margin-top: 22px;
+        text-align: center; /* Центрирование текста */
+        width: 100%; /* Обеспечение полной ширины для центрирования */
+    }
 }

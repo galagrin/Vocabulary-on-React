@@ -1,0 +1,26 @@
+.notFoundImage {
+    width: 300px;
+    align-self: center;
+    animation: loadAnimation 0.8s ease-out forwards;
+}
+
+.notFoundText {
+    color: #58362d;
+    font-family: 'NunitoSans';
+    font-size: 28px;
+    padding: 20px 0;
+    animation: imageLoadAnimation 0.8s ease-out forwards;
+}
+.notFoundLink {
+    text-decoration: none;
+    color: #58362d;
+    font-family: 'NunitoSans';
+    font-size: 24px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    animation: imageLoadAnimation 0.8s ease-out forwards;
+}
+
+.notFoundLink:hover {
+    color: #e2ba96;
+    text-shadow: 0 15px 2px #58362d8d;
+}
