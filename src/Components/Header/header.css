@@ -71,7 +71,7 @@
         height: calc(100vh - 60px);
         transition: all 0.3s ease-in;
         overflow: hidden;
-        flex-direction: column; /* Вертикальное расположение элементов */
+        flex-direction: column;
     }
 
     .navlist.active {
@@ -80,7 +80,7 @@
 
     .navlist li {
         margin-top: 22px;
-        text-align: center; /* Центрирование текста */
-        width: 100%; /* Обеспечение полной ширины для центрирования */
+        text-align: center;
+        width: 100%;
     }
 }
