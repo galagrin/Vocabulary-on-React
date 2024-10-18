@@ -1,0 +1,62 @@
+[
+    {
+        "id": "17175",
+        "english": "apple",
+        "transcription": "[ˈæpl]",
+        "russian": "яблоко"
+    },
+    {
+        "id": "17176",
+        "english": "computer",
+        "transcription": "[kəmˈpjuːtə]",
+        "russian": "компьютер"
+    },
+    {
+        "id": "17177",
+        "english": "ocean",
+        "transcription": "[ˈoʊʃən]",
+        "russian": "океан"
+    },
+    {
+        "id": "17178",
+        "english": "mountain",
+        "transcription": "[ˈmaʊntən]",
+        "russian": "гора"
+    },
+    {
+        "id": "17179",
+        "english": "friend",
+        "transcription": "[frɛnd]",
+        "russian": "друг"
+    },
+    {
+        "id": "17180",
+        "english": "sunflower",
+        "transcription": "[ˈsʌnˌflaʊər]",
+        "russian": "подсолнух"
+    },
+    {
+        "id": "17181",
+        "english": "library",
+        "transcription": "[ˈlaɪbrəri]",
+        "russian": "библиотека"
+    },
+    {
+        "id": "17182",
+        "english": "guitar",
+        "transcription": "[ɡɪˈtɑːr]",
+        "russian": "гитара"
+    },
+    {
+        "id": "17183",
+        "english": "city",
+        "transcription": "[ˈsɪti]",
+        "russian": "город"
+    },
+    {
+        "id": "17184",
+        "english": "happiness",
+        "transcription": "[ˈhæpɪnəs]",
+        "russian": "счастье"
+    }
+]

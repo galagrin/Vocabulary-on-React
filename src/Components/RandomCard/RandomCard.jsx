@@ -2,13 +2,18 @@ import { useState } from 'react';
 import data from '../../data.json';
 import Card from '../Card/Card';
 import { Button } from '../Button/Button';
+import backUp from '../../backUp.json';
 import './RandomCard.css';
 
 export const RandomCard = () => {
     const [rolledOut, setRolledOut] = useState(false);
+
+    // future backup option
+    const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
+
     const getRandomWord = () => {
-        let randomIndex = Math.floor(Math.random() * data.length);
-        return data[randomIndex];
+        let randomIndex = Math.floor(Math.random() * wordsData.length);
+        return wordsData[randomIndex];
     };
 
     const [randomWord, setRandomWord] = useState(getRandomWord());
