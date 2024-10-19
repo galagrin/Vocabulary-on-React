@@ -3,6 +3,7 @@ import Card from '../Card/Card';
 import data from '../../data.json';
 import { Button } from '../Button/Button';
 import backUp from '../../backUp.json';
+import './CardCarousel.css';
 
 export const CardCarousel = () => {
     const [wordIndex, setWordIndex] = useState(0);
@@ -24,16 +25,18 @@ export const CardCarousel = () => {
     };
 
     return (
-        <div className="main">
-            <Button className="prev-btn" onClick={handlePrevWord} text="Назад" />
+        <div className="cardwrapper">
             <Card
                 english={wordsData[wordIndex].english}
                 transcription={wordsData[wordIndex].transcription}
                 russian={wordsData[wordIndex].russian}
                 rollout={rolledOut}
             />
-            <p className="counter">{`${parseInt(wordIndex) + 1} из ${wordsData.length}`}</p>
-            <Button className="next-btn" onClick={handleNextWord} text="Вперед" />
+            <div className="buttonswrapp">
+                <Button className="prev-btn" onClick={handlePrevWord} text="Назад" />
+                <p className="counter">{`${parseInt(wordIndex) + 1} из ${wordsData.length}`}</p>
+                <Button className="next-btn" onClick={handleNextWord} text="Вперед" />
+            </div>
         </div>
     );
 };

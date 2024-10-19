@@ -16,7 +16,7 @@ function Card(props) {
                     <p>{english}</p>
                     <p>{transcription}</p>
                     <button id="cardbtn-turntoback" onClick={handleClick}>
-                        Посмотреть перевод
+                        Перевод
                     </button>
                 </div>
 

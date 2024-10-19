@@ -1,5 +1,6 @@
-.random-btn {
-    width: fit-content;
+.prev-btn,
+.next-btn {
+    min-width: 120px;
     background: white;
     cursor: pointer;
     font-family: 'NunitoSans';
@@ -10,16 +11,31 @@
     border-radius: 30px;
     outline: none;
     transition: transform 0.2s, background-color 0.2s;
-    align-self: center;
-    margin-top: 30px;
 }
-.random-btn:hover {
+
+.prev-btn:hover,
+.next-btn:hover {
     background-color: #67869b;
     color: rgb(255, 253, 253);
     border: 1px solid rgb(255, 250, 250);
 }
 
-.random-btn:active {
+.prev-btn:active,
+.next-btn:active {
     transform: translateY(3px);
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.counter {
+    font-family: 'NunitoSans';
+    font-size: 16px;
+    padding: 5px 30px 5 px 0;
+    color: #58362d;
+}
+.buttonswrapp {
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
 }

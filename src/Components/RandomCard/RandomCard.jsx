@@ -25,7 +25,7 @@ export const RandomCard = () => {
     };
 
     return (
-        <div className="main">
+        <div className="cardwrapper">
             <Card
                 english={randomWord.english}
                 transcription={randomWord.transcription}
