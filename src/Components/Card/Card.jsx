@@ -1,17 +1,23 @@
-import { useState } from 'react';
+import { useRef } from 'react';
 import './card.css';
 
 function Card(props) {
-    const [flipped, setFlipped] = useState(false);
+    const cardRef = useRef(null);
     const handleClick = () => {
-        setFlipped(!flipped);
+        cardRef.current.addEventListener(
+            'transitionend',
+            () => {
+                cardRef.current.classList.toggle('do-flip');
+            },
+            { once: true },
+        );
     };
 
     const { english, transcription, russian, rollout } = props;
 
     return (
         <div className={rollout ? 'flipwrapper roll-out' : 'flipwrapper'}>
-            <div id="flip-card" className={flipped ? 'do-flip' : ''}>
+            <div id="flip-card" ref={cardRef}>
                 <div className="cardfront">
                     <p>{english}</p>
                     <p>{transcription}</p>
