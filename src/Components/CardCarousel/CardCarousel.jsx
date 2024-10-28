@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Card from '../Card/Card';
 import data from '../../data.json';
 import { Button } from '../Button/Button';
+import { Modal } from '../Modal/Modal';
 import backUp from '../../backUp.json';
 import './CardCarousel.css';
 
@@ -13,6 +14,7 @@ export const CardCarousel = () => {
 
     const [usedIds, setUsedIds] = useState([]);
 
+    const [modalInfoOpen, setModalInfoOpen] = useState(false);
     // достаем количество изученных слов из localStorage
     useEffect(() => {
         setCount(JSON.parse(localStorage.getItem('usedId')));
@@ -62,6 +64,15 @@ export const CardCarousel = () => {
 
     return (
         <div className="cardwrapper">
+            <div className="modalcontainer">
+                <div className="modal-showbtn" onClick={() => setModalInfoOpen(true)}>
+                    <img src="./images/icon-info.svg" alt="" />
+                </div>
+
+                <Modal isOpen={modalInfoOpen} onClose={() => setModalInfoOpen(false)}>
+                    <p>Здесь будет текст с информацией</p>
+                </Modal>
+            </div>
             <Card
                 english={wordsData[wordIndex].english}
                 transcription={wordsData[wordIndex].transcription}
