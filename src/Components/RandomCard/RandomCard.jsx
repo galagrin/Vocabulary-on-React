@@ -7,6 +7,7 @@ import './RandomCard.css';
 
 export const RandomCard = () => {
     const [rolledOut, setRolledOut] = useState(false);
+    const [flipped, setFlipped] = useState(false);
 
     // future backup option
     const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
@@ -18,10 +19,16 @@ export const RandomCard = () => {
 
     const [randomWord, setRandomWord] = useState(getRandomWord());
 
+    // переворот карточки
     const handleClick = () => {
+        setFlipped(!flipped);
+    };
+
+    const handleRandomClick = () => {
         setRolledOut(true);
         setTimeout(() => setRolledOut(false), 500);
         setRandomWord(getRandomWord());
+        setFlipped(!flipped);
     };
 
     return (
@@ -31,11 +38,14 @@ export const RandomCard = () => {
                 transcription={randomWord.transcription}
                 russian={randomWord.russian}
                 rollout={rolledOut}
+                handleClick={handleClick}
+                flipped={flipped}
             />
-            <Button className="random-btn" onClick={handleClick} text="Еще одно случайное слово" />
-            {/* <button className="random-btn" onClick={handleClick}>
-                Еще одно случайное слово
-            </button> */}
+            <Button
+                className="random-btn"
+                onClick={handleRandomClick}
+                text="Еще одно случайное слово"
+            />
         </div>
     );
 };

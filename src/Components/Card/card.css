@@ -9,7 +9,7 @@
     margin-top: 50px;
 }
 
-#flip-card {
+.flip-card {
     width: 100%;
     height: 100%;
     text-align: center;
@@ -23,8 +23,8 @@
     transform: rotateY(-180deg);
 }
 
-#cardbtn-turntoback,
-#cardbtn-turntofront {
+.cardbtn-turntoback,
+.cardbtn-turntofront {
     justify-items: flex-end;
     background: white;
     cursor: pointer;
@@ -39,17 +39,24 @@
     transition: transform 0.2s, background-color 0.2s;
 }
 
-#cardbtn-turntoback:hover,
-#cardbtn-turntofront:hover {
+.cardbtn-turntoback:hover,
+.cardbtn-turntofront:hover {
     background-color: #67869b;
     color: rgb(255, 253, 253);
     border: 1px solid rgb(255, 250, 250);
 }
 
-#cardbtn-turntoback:active,
-#cardbtn-turntofront:active {
+.cardbtn-turntoback:active,
+.cardbtn-turntofront:active {
     transform: translateY(3px);
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.cardbtn-turntoback:focus,
+.cardbtn-turntofront:focus {
+    outline: none; /* Убираем стандартное обрамление фокуса */
+    border: 2px solid #67869b; /* Цвет рамки при фокусе */
+    box-shadow: 0 0 5px rgba(103, 134, 155, 0.5); /* Легкая тень при фокусе */
 }
 
 .cardfront,
