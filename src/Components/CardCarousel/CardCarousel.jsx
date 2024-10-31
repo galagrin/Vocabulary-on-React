@@ -4,6 +4,7 @@ import data from '../../data.json';
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import backUp from '../../backUp.json';
+
 import './CardCarousel.css';
 
 export const CardCarousel = () => {
@@ -11,10 +12,11 @@ export const CardCarousel = () => {
     const [rolledOut, setRolledOut] = useState(false);
     const [count, setCount] = useState(0);
     const [flipped, setFlipped] = useState(false);
-
     const [usedIds, setUsedIds] = useState([]);
 
+    // модальное окно с информацией
     const [modalInfoOpen, setModalInfoOpen] = useState(false);
+
     // достаем количество изученных слов из localStorage
     useEffect(() => {
         setCount(JSON.parse(localStorage.getItem('usedId')));
@@ -57,6 +59,7 @@ export const CardCarousel = () => {
         }
     };
 
+    // сброс счетчика изученных слов
     const handleResetWordsCount = () => {
         window.localStorage.clear();
         setCount(0);
@@ -64,13 +67,18 @@ export const CardCarousel = () => {
 
     return (
         <div className="cardwrapper">
-            <div className="modalcontainer">
+            <div className="modal-container">
                 <div className="modal-showbtn" onClick={() => setModalInfoOpen(true)}>
-                    <img src="./images/icon-info.svg" alt="" />
+                    <img src="./images/icon-info.svg" alt="информация" />
                 </div>
 
                 <Modal isOpen={modalInfoOpen} onClose={() => setModalInfoOpen(false)}>
-                    <p>Здесь будет текст с информацией</p>
+                    <p>
+                        Изучайте слова, использую кнопки Вперед и Назад. При просмотре перевода
+                        слова оно будет засчитано как изученное. Количество изученных слов указаны
+                        под карточкой в счетчике. Сбрасывайте счетчик нажатием на корзину рядом с
+                        ним.
+                    </p>
                 </Modal>
             </div>
             <Card
@@ -89,8 +97,12 @@ export const CardCarousel = () => {
                 <Button className="next-btn" onClick={handleNextWord} text="Вперед" />
             </div>
 
-            <div>количество изученный слов: {count}</div>
-            <Button text="Сбросить" onClick={handleResetWordsCount} />
+            <div className="counter-container">
+                <p>количество изученный слов: {count}</p>
+                <div onClick={handleResetWordsCount}>
+                    <img src="./images/icon-trash.svg" alt="сбросить счетчик" />
+                </div>
+            </div>
         </div>
     );
 };

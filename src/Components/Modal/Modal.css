@@ -26,13 +26,22 @@
     position: relative;
     margin: 20px;
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
     border-radius: 20px;
-    background-color: #cbcbcb8a;
+    background-color: #859e9b87;
     color: #58362d;
     padding: 40px 20px 20px 20px;
     transform: translateY(-50px);
     transition: opacity 0.3s, transform 0.3s;
+}
+.modal-content p {
+    padding: 20px 20px 20px 0;
+    text-align: justify;
+    text-indent: 20px;
+    line-height: 1.6;
+    margin: 0;
+    font-family: 'NunitoSans';
+    font-size: 18px;
 }
 
 .modal-closebtn {
@@ -46,8 +55,12 @@
     border-radius: 25px;
     cursor: pointer;
 }
+
 .modal-showbtn {
     cursor: pointer;
     position: relative;
     margin: 0 auto;
+}
+.modal-showbtn img {
+    width: 40px;
 }

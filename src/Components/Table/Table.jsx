@@ -12,25 +12,36 @@ export default function Table() {
     // future backup option
     const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
 
+    // кнопка резактировать
     function handleClick(id) {
         setRowEditing(id);
     }
-
+    // кнопка отмена
     const handleCancel = () => {
         setRussianInputValue(!russianInputValue);
         setRowEditing(!rowEditing);
     };
-
+    // кнопка сохранить
+    const handleSave = () => {
+        if (
+            englishInputValue === '' ||
+            transcriptionInputValue === '' ||
+            russianInputValue === ''
+        ) {
+            alert('пустое поле');
+        }
+    };
+    // инпут английский
     const handleEnglishEdit = (e) => {
         const newEnglish = e.target.value;
         setEnglishInputValue(newEnglish);
     };
-
+    // инпут транскрипция
     const handleTranscriptionEdit = (e) => {
         const newTranscription = e.target.value;
         setTranscriptionInputValue(newTranscription);
     };
-
+    // инпут перевод
     const handleRussianEdit = (id, e) => {
         setRussianInputValue((prevValue) => ({ ...prevValue, [id]: e.target.value }));
     };
@@ -54,7 +65,8 @@ export default function Table() {
                                 <td>
                                     <input
                                         type="text"
-                                        value={englishInputValue || item.english}
+                                        value={englishInputValue}
+                                        placeholder={englishInputValue || item.english}
                                         onChange={handleEnglishEdit}
                                     />
                                 </td>
@@ -62,7 +74,8 @@ export default function Table() {
                                 <td>
                                     <input
                                         type="text"
-                                        value={transcriptionInputValue || item.transcription}
+                                        value={transcriptionInputValue}
+                                        placeholder={transcriptionInputValue || item.transcription}
                                         onChange={handleTranscriptionEdit}
                                     />
                                 </td>
@@ -70,13 +83,14 @@ export default function Table() {
                                 <td>
                                     <input
                                         type="text"
-                                        value={russianInputValue[item.id] || item.russian}
+                                        value={russianInputValue[item.id]}
+                                        placeholder={russianInputValue[item.id] || item.russian}
                                         onChange={(e) => handleRussianEdit(item.id, e)}
                                     />
                                 </td>
 
                                 <td>
-                                    <button>сохранить</button>
+                                    <button onClick={handleSave}>сохранить</button>
                                     <button onClick={handleCancel}>отменить</button>
                                 </td>
                             </>
