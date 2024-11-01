@@ -28,7 +28,7 @@ export const RandomCard = () => {
         setRolledOut(true);
         setTimeout(() => setRolledOut(false), 500);
         setRandomWord(getRandomWord());
-        setFlipped(!flipped);
+        setFlipped(false);
     };
 
     return (

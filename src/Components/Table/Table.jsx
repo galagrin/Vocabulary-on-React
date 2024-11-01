@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import data from '../../data.json';
 import backUp from '../../backUp.json';
+import { TableHead } from './TableHead/TableHead';
 import './Table.css';
 
 export default function Table() {
@@ -48,14 +49,7 @@ export default function Table() {
 
     return (
         <table>
-            <thead>
-                <tr>
-                    <th>Английский</th>
-                    <th>Транскрипция</th>
-                    <th>Перевод</th>
-                    <th></th>
-                </tr>
-            </thead>
+            <TableHead />
 
             <tbody>
                 {wordsData.map((item) => (
