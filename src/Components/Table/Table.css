@@ -46,7 +46,9 @@ td button {
     border-radius: 30px;
     outline: none;
     transition: transform 0.2s, background-color 0.2s;
-    margin-left: 10px;
+    margin-left: 20px;
+    border-width: 1.5px;
+    border-color: #859e9b;
 }
 
 td button:hover {
@@ -65,4 +67,13 @@ tr input {
     border-radius: 10px;
     width: 90%;
     outline: none;
+}
+.inactive {
+    background: rgb(117, 117, 117) 9b;
+    cursor: not-allowed;
+    border-color: firebrick;
+}
+
+.inputErrors {
+    border-color: firebrick;
 }
