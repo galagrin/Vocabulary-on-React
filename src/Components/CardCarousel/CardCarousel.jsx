@@ -28,7 +28,8 @@ export const CardCarousel = () => {
     };
 
     // future backup option
-    const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
+    // const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
+    const wordsData = data.length ? data : backUp;
 
     // переключение на следующую карточку и переворот на англ
     const handleNextWord = () => {

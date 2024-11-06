@@ -13,12 +13,25 @@ export default function Table() {
     const [englishError, setEnglishError] = useState({});
     const [transcriptionError, setTranscriptionError] = useState({});
     const [russianError, setRussianError] = useState({});
+    // состояние поиска слова
+    const [search, setSearch] = useState('');
+
+    const [regexpValidation, setRegexpValidation] = useState({
+        englishValid: '',
+        translationValid: '',
+        russianValid: '',
+    });
 
     // future backup option
     const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
 
-    // кнопка реДактировать
+    // кнопка редактировать
     function handleClick(id) {
+        setRegexpValidation((prev) => ({
+            ...prev,
+            englishValid: '',
+        }));
+        setEnglishError(true);
         setRowEditing(id);
     }
     // кнопка отмена
@@ -32,26 +45,45 @@ export default function Table() {
         if (!isInputsFilled) {
             alert('пустое поле');
         } else {
-            console.log('значение сохранено');
+            const englishWord = englishInputValue[rowEditing];
+            const transcription = transcriptionInputValue[rowEditing];
+            const russianTranslation = russianInputValue[rowEditing];
+            alert(
+                `Изменения внесены: слово - ${englishWord}, транскрипция - ${transcription}, русский перевод - ${russianTranslation}`,
+            );
             setRowEditing('');
         }
     };
+
     // инпут английский
     const handleEnglishEdit = (id, e) => {
         setEnglishInputValue((prevValue) => ({ ...prevValue, [id]: e.target.value }));
+        const englishRegex = /^[A-Za-z]+$/;
 
         if (e.target.value.trim() === '') {
-            console.log('пустое поле');
             setEnglishError(false);
+            setRegexpValidation((prev) => ({
+                ...prev,
+                englishValid: 'поле не должно быть пустым',
+            }));
+        } else if (!englishRegex.test(e.target.value.trim())) {
+            setRegexpValidation((prev) => ({
+                ...prev,
+                englishValid: 'поле должно содержать английские буквы',
+            }));
         } else {
             setEnglishError(true);
+            setRegexpValidation((prev) => ({
+                ...prev,
+                englishValid: '',
+            }));
         }
     };
+
     // инпут транскрипция
     const handleTranscriptionEdit = (id, e) => {
         setTranscriptionInputValue((prevValue) => ({ ...prevValue, [id]: e.target.value }));
         if (e.target.value.trim() === '') {
-            console.log('пустое поле');
             setTranscriptionError(false);
         } else {
             setTranscriptionError(true);
@@ -61,7 +93,6 @@ export default function Table() {
     const handleRussianEdit = (id, e) => {
         setRussianInputValue((prevValue) => ({ ...prevValue, [id]: e.target.value }));
         if (e.target.value.trim() === '') {
-            console.log('пустое поле');
             setRussianError(false);
         } else {
             setRussianError(true);
@@ -80,12 +111,30 @@ export default function Table() {
         );
     };
 
+    // функция поиска английского слова
+    const searchEnglish = (data, search) => {
+        if (search.length === 0) {
+            return data;
+        }
+        return data.filter((item) => {
+            return item.english.indexOf(search) > -1;
+        });
+    };
+    // инпут поиска слова
+    const onUpdateSearch = (e) => {
+        setSearch(e.target.value);
+    };
+    // данные с учетом поиска слова
+    const visibleData = searchEnglish(wordsData, search);
+
     return (
         <table>
             <TableHead />
+            {/* инпут для поиска слов */}
+            <input type="text" placeholder="найти слово" onChange={(e) => onUpdateSearch(e)} />
 
             <tbody>
-                {wordsData.map((item) => (
+                {visibleData.map((item) => (
                     <tr key={item.id}>
                         {rowEditing === item.id ? (
                             <>
@@ -97,8 +146,18 @@ export default function Table() {
                                         placeholder={item.english}
                                         onChange={(e) => handleEnglishEdit(item.id, e)}
                                         className={!englishError ? 'inputErrors' : ''}
-                                        // onBlur={(e) => blurHandler(item.id, e)}
                                     />
+                                    {regexpValidation.englishValid[item.id] !== '' && (
+                                        <div
+                                            style={{
+                                                color: 'red',
+                                                fontSize: '12px',
+                                                fontStyle: 'italic',
+                                            }}
+                                        >
+                                            {regexpValidation.englishValid}
+                                        </div>
+                                    )}
                                 </td>
 
                                 <td>
@@ -109,7 +168,6 @@ export default function Table() {
                                         placeholder={item.transcription}
                                         onChange={(e) => handleTranscriptionEdit(item.id, e)}
                                         className={!transcriptionError ? 'inputErrors' : ''}
-                                        // onBlur={(e) => blurHandler(item.id, e)}
                                     />
                                 </td>
 
@@ -121,7 +179,6 @@ export default function Table() {
                                         placeholder={item.russian}
                                         onChange={(e) => handleRussianEdit(item.id, e)}
                                         className={!russianError ? 'inputErrors' : ''}
-                                        // onBlur={(e) => blurHandler(item.id, e)}
                                     />
                                 </td>
 
