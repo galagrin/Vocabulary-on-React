@@ -6,6 +6,7 @@ import { Modal } from '../Modal/Modal';
 import backUp from '../../backUp.json';
 
 import './CardCarousel.css';
+import { Counter } from './Counter/Counter';
 
 export const CardCarousel = () => {
     const [wordIndex, setWordIndex] = useState(0);
@@ -98,12 +99,7 @@ export const CardCarousel = () => {
                 <Button className="next-btn" onClick={handleNextWord} text="Вперед" />
             </div>
 
-            <div className="counter-container">
-                <p>количество изученный слов: {count}</p>
-                <div onClick={handleResetWordsCount}>
-                    <img src="./images/icon-trash.svg" alt="сбросить счетчик" />
-                </div>
-            </div>
+            <Counter count={count} onClick={handleResetWordsCount} />
         </div>
     );
 };
