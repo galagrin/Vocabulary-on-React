@@ -16,6 +16,7 @@ export default function Table() {
     // состояние поиска слова
     const [search, setSearch] = useState('');
 
+    // состояни валидации инпутов
     const [regexpValidation, setRegexpValidation] = useState({
         englishValid: '',
         translationValid: '',
@@ -31,7 +32,12 @@ export default function Table() {
             ...prev,
             englishValid: '',
         }));
+        setRegexpValidation((prev) => ({
+            ...prev,
+            russianValid: '',
+        }));
         setEnglishError(true);
+        setRussianError(true);
         setRowEditing(id);
     }
     // кнопка отмена
@@ -83,6 +89,7 @@ export default function Table() {
     // инпут транскрипция
     const handleTranscriptionEdit = (id, e) => {
         setTranscriptionInputValue((prevValue) => ({ ...prevValue, [id]: e.target.value }));
+
         if (e.target.value.trim() === '') {
             setTranscriptionError(false);
         } else {
@@ -92,10 +99,25 @@ export default function Table() {
     // инпут перевод
     const handleRussianEdit = (id, e) => {
         setRussianInputValue((prevValue) => ({ ...prevValue, [id]: e.target.value }));
+        const russianRegex = /^[А-Яа-яЁё]+$/;
+
         if (e.target.value.trim() === '') {
             setRussianError(false);
+            setRegexpValidation((prev) => ({
+                ...prev,
+                russianValid: 'поле не должно быть пустым',
+            }));
+        } else if (!russianRegex.test(e.target.value.trim())) {
+            setRegexpValidation((prev) => ({
+                ...prev,
+                russianValid: 'поле должно содержать русские буквы',
+            }));
         } else {
             setRussianError(true);
+            setRegexpValidation((prev) => ({
+                ...prev,
+                russianValid: '',
+            }));
         }
     };
 
@@ -180,6 +202,17 @@ export default function Table() {
                                         onChange={(e) => handleRussianEdit(item.id, e)}
                                         className={!russianError ? 'inputErrors' : ''}
                                     />
+                                    {regexpValidation.russianValid[item.id] !== '' && (
+                                        <div
+                                            style={{
+                                                color: 'red',
+                                                fontSize: '12px',
+                                                fontStyle: 'italic',
+                                            }}
+                                        >
+                                            {regexpValidation.russianValid}
+                                        </div>
+                                    )}
                                 </td>
 
                                 <td>
