@@ -26,6 +26,9 @@ th {
 tr {
     background-color: #d0c4c8;
 }
+.searchrow {
+    background-color: #faf4e8;
+}
 th:first-child {
     border-top-left-radius: 10px;
 }
@@ -68,6 +71,27 @@ tr input {
     width: 90%;
     outline: none;
 }
+
+.searchrow input {
+    font-size: 16px;
+    line-height: 1.5;
+    background: #d0c4c88c;
+    border: 1px solid #fefefe;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><path fill='%238C92A0' d='M11.44 10.73l4.41 4.42a.5.5 0 1 1-.7.7l-4.42-4.41a6.5 6.5 0 1 1 .7-.7v-.01zM6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z'></path></svg>");
+    background-repeat: no-repeat;
+    background-position: 15px 10px;
+    background-size: 20px 20px;
+    border-radius: 100px;
+    width: 300px;
+    padding: 0.5em 1em 0.5em 2.5em;
+}
+
+.searchrow input:focus {
+    outline: none;
+    background-color: #fff;
+    border: 1px solid #859e9b;
+}
+
 .inactive {
     background: rgb(117, 117, 117) 9b;
     cursor: not-allowed;

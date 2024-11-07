@@ -19,7 +19,7 @@ export default function Table() {
     // состояни валидации инпутов
     const [regexpValidation, setRegexpValidation] = useState({
         englishValid: '',
-        translationValid: '',
+        transcriptionValid: '',
         russianValid: '',
     });
 
@@ -89,11 +89,25 @@ export default function Table() {
     // инпут транскрипция
     const handleTranscriptionEdit = (id, e) => {
         setTranscriptionInputValue((prevValue) => ({ ...prevValue, [id]: e.target.value }));
+        const transcriptionRegex = /\[[a-zA-Zˈˌːˑˈˌːˑ]+\]/;
 
         if (e.target.value.trim() === '') {
             setTranscriptionError(false);
+            setRegexpValidation((prev) => ({
+                ...prev,
+                transcriptionValid: 'поле не должно быть пустым',
+            }));
+        } else if (!transcriptionRegex.test(e.target.value.trim())) {
+            setRegexpValidation((prev) => ({
+                ...prev,
+                transcriptionValid: 'поле должно содержать английские буквы и символы []',
+            }));
         } else {
             setTranscriptionError(true);
+            setRegexpValidation((prev) => ({
+                ...prev,
+                transcriptionValid: '',
+            }));
         }
     };
     // инпут перевод
@@ -152,10 +166,17 @@ export default function Table() {
     return (
         <table>
             <TableHead />
-            {/* инпут для поиска слов */}
-            <input type="text" placeholder="найти слово" onChange={(e) => onUpdateSearch(e)} />
-
             <tbody>
+                <tr>
+                    <td className="searchrow">
+                        <input
+                            type="text"
+                            placeholder="найти слово"
+                            onChange={(e) => onUpdateSearch(e)}
+                        />
+                    </td>
+                </tr>
+
                 {visibleData.map((item) => (
                     <tr key={item.id}>
                         {rowEditing === item.id ? (
@@ -191,6 +212,17 @@ export default function Table() {
                                         onChange={(e) => handleTranscriptionEdit(item.id, e)}
                                         className={!transcriptionError ? 'inputErrors' : ''}
                                     />
+                                    {regexpValidation.transcriptionValid[item.id] !== '' && (
+                                        <div
+                                            style={{
+                                                color: 'red',
+                                                fontSize: '12px',
+                                                fontStyle: 'italic',
+                                            }}
+                                        >
+                                            {regexpValidation.transcriptionValid}
+                                        </div>
+                                    )}
                                 </td>
 
                                 <td>
