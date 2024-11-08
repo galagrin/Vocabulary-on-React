@@ -16,7 +16,7 @@ export default function Table() {
     // состояние поиска слова
     const [search, setSearch] = useState('');
 
-    // состояни валидации инпутов
+    // состояние валидации инпутов
     const [regexpValidation, setRegexpValidation] = useState({
         englishValid: '',
         transcriptionValid: '',
@@ -24,7 +24,8 @@ export default function Table() {
     });
 
     // future backup option
-    const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
+    // const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
+    const [wordsData, setWordsData] = useState(data.length ? data : backUp);
 
     // кнопка редактировать
     function handleClick(id) {
@@ -34,9 +35,14 @@ export default function Table() {
         }));
         setRegexpValidation((prev) => ({
             ...prev,
+            transcriptionValid: '',
+        }));
+        setRegexpValidation((prev) => ({
+            ...prev,
             russianValid: '',
         }));
         setEnglishError(true);
+        setTranscriptionError(true);
         setRussianError(true);
         setRowEditing(id);
     }
@@ -50,13 +56,24 @@ export default function Table() {
     const handleSave = () => {
         if (!isInputsFilled) {
             alert('пустое поле');
+            return;
         } else {
-            const englishWord = englishInputValue[rowEditing];
-            const transcription = transcriptionInputValue[rowEditing];
-            const russianTranslation = russianInputValue[rowEditing];
+            // записываем изменения в состояния wordsData и возвращаем item
+            const updatedWords = wordsData.map((item) => {
+                if (item.id === rowEditing) {
+                    return {
+                        ...item,
+                        english: englishInputValue[rowEditing] || item.english,
+                        transcription: transcriptionInputValue[rowEditing] || item.transcription,
+                        russian: russianInputValue[rowEditing] || item.russian,
+                    };
+                }
+                return item;
+            });
             alert(
-                `Изменения внесены: слово - ${englishWord}, транскрипция - ${transcription}, русский перевод - ${russianTranslation}`,
+                `Изменения внесены: слово - ${englishInputValue[rowEditing]}, транскрипция - ${transcriptionInputValue[rowEditing]}, русский перевод - ${russianInputValue[rowEditing]}`,
             );
+            setWordsData(updatedWords);
             setRowEditing('');
         }
     };
