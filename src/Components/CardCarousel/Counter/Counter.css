@@ -1,0 +1,27 @@
+.counter {
+    font-family: 'NunitoSans';
+    font-size: 16px;
+    padding: 5px 30px 5 px 0;
+    color: #58362d;
+}
+.counter-container {
+    padding-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-family: 'NunitoSans';
+    font-size: 18px;
+
+    color: #58362d;
+}
+.counter-container div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.counter-container div img {
+    width: 20px;
+    cursor: pointer;
+    text-align: center;
+}

@@ -1,3 +1,5 @@
+import './Counter.css';
+
 export const Counter = ({ count, onClick }) => {
     return (
         <>

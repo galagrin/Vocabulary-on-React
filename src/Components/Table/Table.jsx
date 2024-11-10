@@ -327,7 +327,13 @@ export default function Table() {
         transcriptionValid: '',
         russianValid: '',
     });
+    // Состояние добавления Нового слова
 
+    const [newWord, setNewWord] = useState({
+        english: '',
+        transcription: '',
+        russian: '',
+    });
     // future backup option
     // const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
     const [wordsData, setWordsData] = useState(data.length ? data : backUp);
@@ -391,7 +397,7 @@ export default function Table() {
     // инпут английский
     const handleEnglishEdit = (id, e) => {
         setInputValue((prevValue) => ({ ...prevValue, [e.target.name]: e.target.value }));
-        const englishRegex = /^[A-Za-z]+$/;
+        const englishRegex = /^[A-Za-z\s+]+$/;
 
         if (e.target.value.trim() === '') {
             setRegexpValidation((prev) => ({
@@ -418,7 +424,7 @@ export default function Table() {
             ...prevValue,
             [e.target.name]: e.target.value,
         }));
-        const transcriptionRegex = /^\[[a-zA-Zˈˌːˑˈˌːˑæʃɪʊɛɒʊʌɹɡʔʊəʤː]*\]$/;
+        const transcriptionRegex = /^\[[a-zA-Zˈˌːˑˈˌːˑæʃɪʊɛɒʊʌɹɡʔʊəʤː\s+]*\]$/;
 
         if (e.target.value.trim() === '') {
             setRegexpValidation((prev) => ({
@@ -441,7 +447,7 @@ export default function Table() {
     // инпут перевод
     const handleRussianEdit = (id, e) => {
         setInputValue((prevValue) => ({ ...prevValue, [e.target.name]: e.target.value }));
-        const russianRegex = /^[А-Яа-яЁё]+$/;
+        const russianRegex = /^[А-Яа-яЁё\s+]+$/;
 
         if (e.target.value.trim() === '') {
             setRegexpValidation((prev) => ({
@@ -487,6 +493,18 @@ export default function Table() {
     const onUpdateSearch = (e) => {
         setSearch(e.target.value);
     };
+
+    const handleNewWord = (e) => {
+        setNewWord((prevValue) => ({ ...prevValue, [e.target.name]: e.target.value }));
+        console.log(newWord);
+    };
+    const handleAddNewWord = () => {
+        setNewWord({
+            english: '',
+            transcription: '',
+            russian: '',
+        });
+    };
     // данные с учетом поиска слова
     const visibleData = searchEnglish(wordsData, search);
 
@@ -501,6 +519,38 @@ export default function Table() {
                             placeholder="найти слово"
                             onChange={(e) => onUpdateSearch(e)}
                         />
+                    </td>
+                </tr>
+                <tr className="newword-row">
+                    <td>
+                        <input
+                            type="text"
+                            name="english"
+                            placeholder="введите слово на английском"
+                            value={newWord.english}
+                            onChange={(e) => handleNewWord(e)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name="transcription"
+                            placeholder="введите транскрипцию"
+                            value={newWord.transcription}
+                            onChange={(e) => handleNewWord(e)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name="russian"
+                            placeholder="введите перевод"
+                            value={newWord.russian}
+                            onChange={(e) => handleNewWord(e)}
+                        />
+                    </td>
+                    <td>
+                        <button onClick={handleAddNewWord}>добавить новое слово</button>
                     </td>
                 </tr>
 
