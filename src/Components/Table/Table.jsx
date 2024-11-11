@@ -6,11 +6,7 @@ import './Table.css';
 
 export default function Table() {
     const [rowEditing, setRowEditing] = useState('');
-    const [inputValue, setInputValue] = useState({
-        english: '',
-        transcription: '',
-        russian: '',
-    });
+    const [inputValue, setInputValue] = useState({ english: '', transcription: '', russian: '' });
 
     const [emptyFieldError, setEmptyFieldError] = useState({
         english: false,
@@ -29,11 +25,8 @@ export default function Table() {
     });
     // Состояние добавления Нового слова
 
-    const [newWord, setNewWord] = useState({
-        english: '',
-        transcription: '',
-        russian: '',
-    });
+    const [newWord, setNewWord] = useState({ english: '', transcription: '', russian: '' });
+
     // future backup option
     // const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
     const [wordsData, setWordsData] = useState(data.length ? data : backUp);
@@ -46,26 +39,14 @@ export default function Table() {
             transcription: itemToEdit.transcription,
             russian: itemToEdit.russian,
         });
-        setRegexpValidation({
-            englishValid: '',
-            transcriptionValid: '',
-            russianValid: '',
-        });
-        setEmptyFieldError({
-            english: true,
-            transcription: true,
-            russian: true,
-        });
+        setRegexpValidation({ englishValid: '', transcriptionValid: '', russianValid: '' });
+        setEmptyFieldError({ english: true, transcription: true, russian: true });
         setRowEditing(id);
     }
     // кнопка отмена
     const handleCancel = () => {
         setInputValue(!inputValue);
-        setRowEditing({
-            english: '',
-            transcription: '',
-            russian: '',
-        });
+        setRowEditing({ english: '', transcription: '', russian: '' });
     };
 
     // кнопка сохранить
@@ -86,9 +67,7 @@ export default function Table() {
                 }
                 return item;
             });
-            alert(
-                `Изменения внесены: слово - ${inputValue.english}, транскрипция - ${inputValue.transcription}, русский перевод - ${inputValue.russian}`,
-            );
+            alert(`Изменения внесены: слово - ${inputValue.english}, транскрипция - ${inputValue.transcription}, русский перевод - ${inputValue.russian}`);
             setWordsData(updatedWords);
             setRowEditing('');
         }
@@ -161,23 +140,13 @@ export default function Table() {
             }));
         } else {
             setEmptyFieldError((prevValue) => ({ ...prevValue, [e.target.name]: true }));
-            setRegexpValidation((prev) => ({
-                ...prev,
-                russianValid: '',
-            }));
+            setRegexpValidation((prev) => ({ ...prev, russianValid: '' }));
         }
     };
 
     // проверка заполнения инпутов
     const isInputsFilled = (id) => {
-        return (
-            inputValue.english &&
-            inputValue.english.trim() !== '' &&
-            inputValue.transcription &&
-            inputValue.transcription.trim() !== '' &&
-            inputValue.russian &&
-            inputValue.russian.trim() !== ''
-        );
+        return inputValue.english && inputValue.english.trim() !== '' && inputValue.transcription && inputValue.transcription.trim() !== '' && inputValue.russian && inputValue.russian.trim() !== '';
     };
 
     // функция поиска английского слова
@@ -199,11 +168,7 @@ export default function Table() {
         console.log(newWord);
     };
     const handleAddNewWord = () => {
-        setNewWord({
-            english: '',
-            transcription: '',
-            russian: '',
-        });
+        setNewWord({ english: '', transcription: '', russian: '' });
     };
     // данные с учетом поиска слова
     const visibleData = searchEnglish(wordsData, search);
@@ -214,40 +179,18 @@ export default function Table() {
             <tbody>
                 <tr>
                     <td className="searchrow">
-                        <input
-                            type="text"
-                            placeholder="найти слово"
-                            onChange={(e) => onUpdateSearch(e)}
-                        />
+                        <input type="text" placeholder="найти слово" onChange={(e) => onUpdateSearch(e)} />
                     </td>
                 </tr>
                 <tr className="newword-row">
                     <td>
-                        <input
-                            type="text"
-                            name="english"
-                            placeholder="введите слово на английском"
-                            value={newWord.english}
-                            onChange={(e) => handleNewWord(e)}
-                        />
+                        <input type="text" name="english" placeholder="введите слово на английском" value={newWord.english} onChange={(e) => handleNewWord(e)} />
                     </td>
                     <td>
-                        <input
-                            type="text"
-                            name="transcription"
-                            placeholder="введите транскрипцию"
-                            value={newWord.transcription}
-                            onChange={(e) => handleNewWord(e)}
-                        />
+                        <input type="text" name="transcription" placeholder="введите транскрипцию" value={newWord.transcription} onChange={(e) => handleNewWord(e)} />
                     </td>
                     <td>
-                        <input
-                            type="text"
-                            name="russian"
-                            placeholder="введите перевод"
-                            value={newWord.russian}
-                            onChange={(e) => handleNewWord(e)}
-                        />
+                        <input type="text" name="russian" placeholder="введите перевод" value={newWord.russian} onChange={(e) => handleNewWord(e)} />
                     </td>
                     <td>
                         <button onClick={handleAddNewWord}>добавить новое слово</button>
@@ -267,17 +210,7 @@ export default function Table() {
                                         onChange={(e) => handleEnglishEdit(item.id, e)}
                                         className={!emptyFieldError.english ? 'inputErrors' : ''}
                                     />
-                                    {regexpValidation.englishValid[item.id] !== '' && (
-                                        <div
-                                            style={{
-                                                color: 'red',
-                                                fontSize: '12px',
-                                                fontStyle: 'italic',
-                                            }}
-                                        >
-                                            {regexpValidation.englishValid}
-                                        </div>
-                                    )}
+                                    {regexpValidation.englishValid[item.id] !== '' && <div className="validationError">{regexpValidation.englishValid}</div>}
                                 </td>
 
                                 <td>
@@ -287,21 +220,9 @@ export default function Table() {
                                         value={inputValue.transcription || ''}
                                         placeholder={item.transcription}
                                         onChange={(e) => handleTranscriptionEdit(item.id, e)}
-                                        className={
-                                            !emptyFieldError.transcription ? 'inputErrors' : ''
-                                        }
+                                        className={!emptyFieldError.transcription ? 'inputErrors' : ''}
                                     />
-                                    {regexpValidation.transcriptionValid[item.id] !== '' && (
-                                        <div
-                                            style={{
-                                                color: 'red',
-                                                fontSize: '12px',
-                                                fontStyle: 'italic',
-                                            }}
-                                        >
-                                            {regexpValidation.transcriptionValid}
-                                        </div>
-                                    )}
+                                    {regexpValidation.transcriptionValid[item.id] !== '' && <div className="validationError">{regexpValidation.transcriptionValid}</div>}
                                 </td>
 
                                 <td>
@@ -313,25 +234,11 @@ export default function Table() {
                                         onChange={(e) => handleRussianEdit(item.id, e)}
                                         className={!emptyFieldError.russian ? 'inputErrors' : ''}
                                     />
-                                    {regexpValidation.russianValid[item.id] !== '' && (
-                                        <div
-                                            style={{
-                                                color: 'red',
-                                                fontSize: '12px',
-                                                fontStyle: 'italic',
-                                            }}
-                                        >
-                                            {regexpValidation.russianValid}
-                                        </div>
-                                    )}
+                                    {regexpValidation.russianValid[item.id] !== '' && <div className="validationError">{regexpValidation.russianValid}</div>}
                                 </td>
 
                                 <td>
-                                    <button
-                                        onClick={handleSave}
-                                        disabled={!isInputsFilled(item.id)}
-                                        className={!isInputsFilled(item.id) ? 'inactive' : ''}
-                                    >
+                                    <button onClick={handleSave} disabled={!isInputsFilled(item.id)} className={!isInputsFilled(item.id) ? 'inactive' : ''}>
                                         сохранить
                                     </button>
                                     <button onClick={handleCancel}>отменить</button>
@@ -340,15 +247,11 @@ export default function Table() {
                         ) : (
                             <>
                                 <td>{item.english}</td>
-
                                 <td>{item.transcription}</td>
-
                                 <td>{item.russian}</td>
 
                                 <td>
-                                    <button onClick={() => handleClick(item.id)}>
-                                        редактировать
-                                    </button>
+                                    <button onClick={() => handleClick(item.id)}>редактировать</button>
                                     <button>удалить</button>
                                 </td>
                             </>

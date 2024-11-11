@@ -101,3 +101,8 @@ tr input {
 .inputErrors {
     border-color: firebrick;
 }
+.validationError {
+    color: rgb(221, 44, 44);
+    font-size: 14px;
+    font-style: italic;
+}
