@@ -8,11 +8,7 @@ export default function Table() {
     const [rowEditing, setRowEditing] = useState('');
     const [inputValue, setInputValue] = useState({ english: '', transcription: '', russian: '' });
 
-    const [emptyFieldError, setEmptyFieldError] = useState({
-        english: false,
-        transcription: false,
-        russian: false,
-    });
+    const [emptyFieldError, setEmptyFieldError] = useState({ english: false, transcription: false, russian: false });
 
     // состояние поиска слова
     const [search, setSearch] = useState('');
