@@ -6,23 +6,26 @@ import Table from './Components/Table/Table';
 import { CardCarousel } from './Components/CardCarousel/CardCarousel';
 import { RandomCard } from './Components/RandomCard/RandomCard';
 import { NotFound } from './Components/NotFound/NotFound';
+import { ContextProvider } from './Context.js';
 
 function App() {
     return (
-        <Router>
-            <div className="App">
-                <Header />
-                <main className="main">
-                    <Routes>
-                        <Route path="/" element={<Table />} />
-                        <Route path="/game" element={<CardCarousel />} />
-                        <Route path="/random" element={<RandomCard />} />
-                        <Route path="*" element={<NotFound />}></Route>
-                    </Routes>
-                </main>
-                <Footer />
-            </div>
-        </Router>
+        <ContextProvider>
+            <Router>
+                <div className="App">
+                    <Header />
+                    <main className="main">
+                        <Routes>
+                            <Route path="/" element={<Table />} />
+                            <Route path="/game" element={<CardCarousel />} />
+                            <Route path="/random" element={<RandomCard />} />
+                            <Route path="*" element={<NotFound />}></Route>
+                        </Routes>
+                    </main>
+                    <Footer />
+                </div>
+            </Router>
+        </ContextProvider>
     );
 }
 

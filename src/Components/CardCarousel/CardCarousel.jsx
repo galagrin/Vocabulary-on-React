@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Card from '../Card/Card';
 import data from '../../data.json';
+import { Context } from '../../Context.js';
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import backUp from '../../backUp.json';
@@ -9,6 +10,7 @@ import './CardCarousel.css';
 import { Counter } from './Counter/Counter';
 
 export const CardCarousel = () => {
+    const { dictionary } = useContext(Context);
     const [wordIndex, setWordIndex] = useState(0);
     const [rolledOut, setRolledOut] = useState(false);
     const [count, setCount] = useState(0);
@@ -30,7 +32,7 @@ export const CardCarousel = () => {
 
     // future backup option
     // const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
-    const wordsData = data.length ? data : backUp;
+    const wordsData = data.length ? dictionary : backUp;
 
     // переключение на следующую карточку и переворот на англ
     const handleNextWord = () => {
@@ -76,10 +78,8 @@ export const CardCarousel = () => {
 
                 <Modal isOpen={modalInfoOpen} onClose={() => setModalInfoOpen(false)}>
                     <p>
-                        Изучайте слова, использую кнопки Вперед и Назад. При просмотре перевода
-                        слова оно будет засчитано как изученное. Количество изученных слов указаны
-                        под карточкой в счетчике. Сбрасывайте счетчик нажатием на корзину рядом с
-                        ним.
+                        Изучайте слова, использую кнопки Вперед и Назад. При просмотре перевода слова оно будет засчитано как изученное. Количество
+                        изученных слов указаны под карточкой в счетчике. Сбрасывайте счетчик нажатием на корзину рядом с ним.
                     </p>
                 </Modal>
             </div>
