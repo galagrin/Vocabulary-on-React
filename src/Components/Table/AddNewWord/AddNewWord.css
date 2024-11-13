@@ -1,0 +1,9 @@
+.toast-message {
+    background: #faf4e89f;
+    font-size: 16px;
+    padding: 10px;
+    color: #58362d;
+    backdrop-filter: blur(40px);
+    border: 2px solid transparent;
+    box-shadow: 8px 8px 12px rgba(0, 0, 0, 10%);
+}

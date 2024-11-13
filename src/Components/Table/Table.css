@@ -105,4 +105,6 @@ tr input {
     color: rgb(221, 44, 44);
     font-size: 14px;
     font-style: italic;
+    display: block; /* или inline-block, если нужно */
+    margin-top: 5px;
 }

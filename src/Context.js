@@ -52,9 +52,27 @@ export const ContextProvider = (props) => {
             });
     };
 
+    const deleteWord = (id) => {
+        fetch(`http://itgirlschool.justmakeit.ru/api/words/${id}/delete`, {
+            method: 'POST',
+        })
+            .then((response) => {
+                if (response.ok) {
+                    const newDictionary = [...dictionary].filter((item) => item.id !== id);
+                    setDictionary(newDictionary);
+                } else {
+                    throw new Error('Ошибка удаления слова');
+                }
+            })
+
+            .catch((error) => {
+                console.error('Ошибка удаления слова', error);
+            });
+    };
+
     if (isLoading) {
         return <Loader />;
     }
 
-    return <Context.Provider value={{ dictionary, isLoading, setDictionary, addNewWord }}>{props.children}</Context.Provider>;
+    return <Context.Provider value={{ dictionary, isLoading, setDictionary, addNewWord, deleteWord }}>{props.children}</Context.Provider>;
 };

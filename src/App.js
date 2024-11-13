@@ -7,6 +7,7 @@ import { CardCarousel } from './Components/CardCarousel/CardCarousel';
 import { RandomCard } from './Components/RandomCard/RandomCard';
 import { NotFound } from './Components/NotFound/NotFound';
 import { ContextProvider } from './Context.js';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                             <Route path="*" element={<NotFound />}></Route>
                         </Routes>
                     </main>
+                    <ToastContainer />
                     <Footer />
                 </div>
             </Router>

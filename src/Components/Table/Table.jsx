@@ -5,11 +5,12 @@ import { TableHead } from './TableHead/TableHead';
 import { SearchRow } from './SearchRow/SearchRow.jsx';
 import { Loader } from '../Loader/Loader.jsx';
 import { AddNewWord } from './AddNewWord/AddNewWord.jsx';
+import { toast } from 'react-toastify';
 
 import './Table.css';
 
 export default function Table() {
-    const { dictionary, isLoading } = useContext(Context);
+    const { dictionary, isLoading, deleteWord } = useContext(Context);
     const [rowEditing, setRowEditing] = useState('');
     const [inputValue, setInputValue] = useState({ english: '', transcription: '', russian: '' });
 
@@ -110,7 +111,24 @@ export default function Table() {
             }
         }
     };
-
+    const handleDeleteWord = async (id) => {
+        try {
+            await deleteWord(id);
+            console.log('Слово удалено');
+            toast.success('Слово удалено', {
+                className: 'toast-message',
+            });
+            const newWordsData = [...wordsData].filter((item) => item.id !== id);
+            setWordsData(newWordsData);
+        } catch (error) {
+            console.error('Упс', error, {
+                className: 'toast-message',
+            });
+            toast.error('Упс, что-то пошло не так! Попробуй еще раз', {
+                className: 'toast-message',
+            });
+        }
+    };
     // проверка заполнения инпутов и валидности для disabled на кнопке
     const isInputsFilled = () => {
         return (
@@ -145,86 +163,92 @@ export default function Table() {
         return <Loader />;
     }
     return (
-        <table>
-            <TableHead />
-            <tbody>
-                <SearchRow onChange={(e) => onUpdateSearch(e)} />
-                <AddNewWord
-                    newWord={newWord}
-                    setNewWord={setNewWord}
-                    englishRegex={englishRegex}
-                    transcriptionRegex={transcriptionRegex}
-                    russianRegex={russianRegex}
-                />
+        <>
+            <table>
+                <TableHead />
+                <tbody>
+                    <SearchRow onChange={(e) => onUpdateSearch(e)} />
 
-                {visibleData.map((item) => (
-                    <tr key={item.id}>
-                        {rowEditing === item.id ? (
-                            <>
-                                <td>
-                                    <input
-                                        type="text"
-                                        name="english"
-                                        value={inputValue.english || ''}
-                                        placeholder={item.english}
-                                        onChange={(e) => handleInputChange(e, 'поле должно содержать английские буквы')}
-                                        className={!emptyFieldError.english || regexpValidation.englishValid ? 'inputErrors' : ''}
-                                    />
-                                    {regexpValidation.englishValid && <div className="validationError">{regexpValidation.englishValid}</div>}
-                                </td>
+                    <AddNewWord
+                        newWord={newWord}
+                        setNewWord={setNewWord}
+                        englishRegex={englishRegex}
+                        transcriptionRegex={transcriptionRegex}
+                        russianRegex={russianRegex}
+                        wordsData={wordsData}
+                        setWordsData={setWordsData}
+                    />
 
-                                <td>
-                                    <input
-                                        type="text"
-                                        name="transcription"
-                                        value={inputValue.transcription || ''}
-                                        placeholder={item.transcription}
-                                        onChange={(e) => handleInputChange(e, 'поле должно содержать английские буквы и символы []')}
-                                        className={!emptyFieldError.transcription || regexpValidation.transcriptionValid ? 'inputErrors' : ''}
-                                    />
-                                    {regexpValidation.transcriptionValid && (
-                                        <div className="validationError">{regexpValidation.transcriptionValid}</div>
-                                    )}
-                                </td>
+                    {visibleData.map((item) => (
+                        <tr key={item.id}>
+                            {rowEditing === item.id ? (
+                                <>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="english"
+                                            value={inputValue.english || ''}
+                                            placeholder={item.english}
+                                            onChange={(e) => handleInputChange(e, 'поле должно содержать английские буквы')}
+                                            className={!emptyFieldError.english || regexpValidation.englishValid ? 'inputErrors' : ''}
+                                        />
+                                        {regexpValidation.englishValid && <span className="validationError">{regexpValidation.englishValid}</span>}
+                                    </td>
 
-                                <td>
-                                    <input
-                                        type="text"
-                                        name="russian"
-                                        value={inputValue.russian || ''}
-                                        placeholder={item.russian}
-                                        onChange={(e) => handleInputChange(e, 'поле должно содержать русские буквы')}
-                                        className={!emptyFieldError.russian || regexpValidation.russianValid ? 'inputErrors' : ''}
-                                    />
-                                    {regexpValidation.russianValid && <div className="validationError">{regexpValidation.russianValid}</div>}
-                                </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="transcription"
+                                            value={inputValue.transcription || ''}
+                                            placeholder={item.transcription}
+                                            onChange={(e) => handleInputChange(e, 'поле должно содержать английские буквы и символы []')}
+                                            className={!emptyFieldError.transcription || regexpValidation.transcriptionValid ? 'inputErrors' : ''}
+                                        />
+                                        {regexpValidation.transcriptionValid && (
+                                            <span className="validationError">{regexpValidation.transcriptionValid}</span>
+                                        )}
+                                    </td>
 
-                                <td>
-                                    <button
-                                        onClick={() => handleSave(item.id)}
-                                        disabled={!isInputsFilled()}
-                                        className={!isInputsFilled() ? 'inactive' : ''}
-                                    >
-                                        сохранить
-                                    </button>
-                                    <button onClick={handleCancel}>отменить</button>
-                                </td>
-                            </>
-                        ) : (
-                            <>
-                                <td>{item.english}</td>
-                                <td>{item.transcription}</td>
-                                <td>{item.russian}</td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="russian"
+                                            value={inputValue.russian || ''}
+                                            placeholder={item.russian}
+                                            onChange={(e) => handleInputChange(e, 'поле должно содержать русские буквы')}
+                                            className={!emptyFieldError.russian || regexpValidation.russianValid ? 'inputErrors' : ''}
+                                        />
+                                        {regexpValidation.russianValid && <span className="validationError">{regexpValidation.russianValid}</span>}
+                                    </td>
 
-                                <td>
-                                    <button onClick={() => handleEdit(item.id)}>редактировать</button>
-                                    <button>удалить</button>
-                                </td>
-                            </>
-                        )}
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+                                    <td>
+                                        <button
+                                            onClick={() => handleSave(item.id)}
+                                            disabled={!isInputsFilled()}
+                                            className={!isInputsFilled() ? 'inactive' : ''}
+                                        >
+                                            сохранить
+                                        </button>
+                                        <button onClick={handleCancel}>отменить</button>
+                                    </td>
+                                </>
+                            ) : (
+                                <>
+                                    <td>{item.english}</td>
+                                    <td>{item.transcription}</td>
+                                    <td>{item.russian}</td>
+
+                                    <td>
+                                        <button onClick={() => handleEdit(item.id)}>редактировать</button>
+                                        {/* <button onClick={() => deleteWord(item.id)}>удалить</button> */}
+                                        <button onClick={() => handleDeleteWord(item.id)}>удалить</button>
+                                    </td>
+                                </>
+                            )}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </>
     );
 }
