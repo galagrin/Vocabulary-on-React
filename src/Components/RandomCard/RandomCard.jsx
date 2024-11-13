@@ -1,13 +1,13 @@
 import { useState, useContext } from 'react';
-import data from '../../data.json';
 import { Context } from '../../Context.js';
 import Card from '../Card/Card';
 import { Button } from '../Button/Button';
 import backUp from '../../backUp.json';
 import './RandomCard.css';
+import { Loader } from '../Loader/Loader.jsx';
 
 export const RandomCard = () => {
-    const { dictionary } = useContext(Context);
+    const { dictionary, isLoading } = useContext(Context);
     const [rolledOut, setRolledOut] = useState(false);
     const [flipped, setFlipped] = useState(false);
 
@@ -33,6 +33,9 @@ export const RandomCard = () => {
         setFlipped(false);
     };
 
+    if (isLoading) {
+        return <Loader />;
+    }
     return (
         <div className="cardwrapper">
             <Card

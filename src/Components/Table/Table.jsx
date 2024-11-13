@@ -1,13 +1,15 @@
 import { useState, useContext } from 'react';
-import data from '../../data.json';
 import { Context } from '../../Context.js';
 import backUp from '../../backUp.json';
 import { TableHead } from './TableHead/TableHead';
-import './Table.css';
 import { SearchRow } from './SearchRow/SearchRow.jsx';
+import { Loader } from '../Loader/Loader.jsx';
+import { AddNewWord } from './AddNewWord/AddNewWord.jsx';
+
+import './Table.css';
 
 export default function Table() {
-    const { dictionary } = useContext(Context);
+    const { dictionary, isLoading } = useContext(Context);
     const [rowEditing, setRowEditing] = useState('');
     const [inputValue, setInputValue] = useState({ english: '', transcription: '', russian: '' });
 
@@ -27,7 +29,7 @@ export default function Table() {
     const [wordsData, setWordsData] = useState(dictionary.length ? dictionary : backUp);
 
     const englishRegex = /^[A-Za-z\s+]+$/;
-    const transcriptionRegex = /^\[[a-zA-Zˈˌːˑˈˌːˑæʃɪʊɛɒʊʌɹɡʔʊəʤː\s+]*\]$/;
+    const transcriptionRegex = /^\[[a-zA-Zˈˌːˑˈˌːˑæʃɪʊɛɒʊʌɹɡʔʊəʤɔ:iː,ˈʧ\s+]*\]$/;
     const russianRegex = /^[А-Яа-яЁё\s+]+$/;
 
     function handleEdit(id) {
@@ -49,7 +51,6 @@ export default function Table() {
 
     const handleSave = (id) => {
         if (!isInputsFilled()) {
-            alert('пустое поле или неправильный формат');
             return;
         } else {
             const updatedWords = wordsData.map((item) => {
@@ -138,48 +139,24 @@ export default function Table() {
         setSearch(e.target.value);
     };
 
-    const handleNewWord = (e) => {
-        setNewWord((prevValue) => ({ ...prevValue, [e.target.name]: e.target.value }));
-    };
-
-    const handleAddNewWord = () => {
-        setNewWord({ english: '', transcription: '', russian: '' });
-    };
-
     const visibleData = searchEnglish(wordsData, search);
 
+    if (isLoading) {
+        return <Loader />;
+    }
     return (
         <table>
             <TableHead />
             <tbody>
                 <SearchRow onChange={(e) => onUpdateSearch(e)} />
+                <AddNewWord
+                    newWord={newWord}
+                    setNewWord={setNewWord}
+                    englishRegex={englishRegex}
+                    transcriptionRegex={transcriptionRegex}
+                    russianRegex={russianRegex}
+                />
 
-                <tr className="newword-row">
-                    <td>
-                        <input
-                            type="text"
-                            name="english"
-                            placeholder="введите слово на английском"
-                            value={newWord.english}
-                            onChange={(e) => handleNewWord(e)}
-                        />
-                    </td>
-                    <td>
-                        <input
-                            type="text"
-                            name="transcription"
-                            placeholder="введите транскрипцию"
-                            value={newWord.transcription}
-                            onChange={(e) => handleNewWord(e)}
-                        />
-                    </td>
-                    <td>
-                        <input type="text" name="russian" placeholder="введите перевод" value={newWord.russian} onChange={(e) => handleNewWord(e)} />
-                    </td>
-                    <td>
-                        <button onClick={handleAddNewWord}>добавить новое слово</button>
-                    </td>
-                </tr>
                 {visibleData.map((item) => (
                     <tr key={item.id}>
                         {rowEditing === item.id ? (

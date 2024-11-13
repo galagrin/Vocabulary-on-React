@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import Card from '../Card/Card';
-import data from '../../data.json';
+
 import { Context } from '../../Context.js';
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
@@ -8,9 +8,10 @@ import backUp from '../../backUp.json';
 
 import './CardCarousel.css';
 import { Counter } from './Counter/Counter';
+import { Loader } from '../Loader/Loader.jsx';
 
 export const CardCarousel = () => {
-    const { dictionary } = useContext(Context);
+    const { dictionary, isLoading } = useContext(Context);
     const [wordIndex, setWordIndex] = useState(0);
     const [rolledOut, setRolledOut] = useState(false);
     const [count, setCount] = useState(0);
@@ -32,7 +33,7 @@ export const CardCarousel = () => {
 
     // future backup option
     // const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
-    const wordsData = data.length ? dictionary : backUp;
+    const wordsData = dictionary.length ? dictionary : backUp;
 
     // переключение на следующую карточку и переворот на англ
     const handleNextWord = () => {
@@ -46,7 +47,7 @@ export const CardCarousel = () => {
     const handlePrevWord = () => {
         setRolledOut(true);
         setTimeout(() => setRolledOut(false), 500);
-        setWordIndex((wordIndex) => (wordIndex - 1 + data.length) % wordsData.length);
+        setWordIndex((wordIndex) => (wordIndex - 1 + wordsData.length) % wordsData.length);
         setFlipped(false);
     };
 
@@ -68,7 +69,9 @@ export const CardCarousel = () => {
         window.localStorage.clear();
         setCount(0);
     };
-
+    if (isLoading) {
+        return <Loader />;
+    }
     return (
         <div className="cardwrapper">
             <div className="modal-container">
