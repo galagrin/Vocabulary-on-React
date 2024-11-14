@@ -70,9 +70,34 @@ export const ContextProvider = (props) => {
             });
     };
 
+    const updateWord = (updatedWord) => {
+        fetch(`http://itgirlschool.justmakeit.ru/api/words/${updatedWord.id}/update`, {
+            method: 'POST',
+            body: JSON.stringify(updatedWord),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    console.log(response.json());
+                    return response.json();
+                } else {
+                    console.log('Response Status:', response.status);
+                    throw new Error('Ошибка редактирования слова');
+                }
+            })
+            .then((updatedWordResponse) => {
+                setDictionary((prevDictionary) => prevDictionary.map((word) => (word.id === updatedWordResponse.id ? updatedWordResponse : word)));
+            })
+            .catch((error) => {
+                console.error('Ошибка:', error.message);
+            });
+    };
+
     if (isLoading) {
         return <Loader />;
     }
 
-    return <Context.Provider value={{ dictionary, isLoading, setDictionary, addNewWord, deleteWord }}>{props.children}</Context.Provider>;
+    return <Context.Provider value={{ dictionary, isLoading, setDictionary, addNewWord, deleteWord, updateWord }}>{props.children}</Context.Provider>;
 };

@@ -1,9 +1,10 @@
 .toast-message {
-    background: #faf4e89f;
+    background: #faf4e8ac;
     font-size: 16px;
     padding: 10px;
     color: #58362d;
     backdrop-filter: blur(40px);
     border: 2px solid transparent;
     box-shadow: 8px 8px 12px rgba(0, 0, 0, 10%);
+    --toastify-color-progress-light: linear-gradient(to right, #5a8d87, #ab8167, #ae5d78, #d5af64, #94ad6b, #f0ba86);
 }

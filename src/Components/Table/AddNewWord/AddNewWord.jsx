@@ -34,7 +34,7 @@ export const AddNewWord = ({ newWord, setNewWord, englishRegex, transcriptionReg
         setErrors(newErrors);
 
         if (hasError) {
-            toast.error('Пожалуйста, исправьте ошибки', {
+            toast('Пожалуйста, исправьте ошибки', {
                 className: 'toast-message',
             });
             return;
@@ -53,13 +53,15 @@ export const AddNewWord = ({ newWord, setNewWord, englishRegex, transcriptionReg
             console.log(newWordObject);
             await addNewWord(newWordObject);
             console.log('Слово добавлено');
-            toast.success('Изменения сохранены', {
+            toast('Изменения сохранены', {
                 className: 'toast-message',
             });
             setWordsData((prev) => [...prev, newWordObject]);
         } catch (error) {
             console.error('Упс', error);
-            toast.error('Упс, что-то пошло не так! Попробуй еще раз.');
+            toast('Упс, что-то пошло не так! Попробуй еще раз', {
+                className: 'toast-message',
+            });
         } finally {
             setNewWord({ english: '', transcription: '', russian: '' });
         }

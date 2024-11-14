@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import './Table.css';
 
 export default function Table() {
-    const { dictionary, isLoading, deleteWord } = useContext(Context);
+    const { dictionary, isLoading, deleteWord, updateWord } = useContext(Context);
     const [rowEditing, setRowEditing] = useState('');
     const [inputValue, setInputValue] = useState({ english: '', transcription: '', russian: '' });
 
@@ -40,6 +40,7 @@ export default function Table() {
             transcription: itemToEdit.transcription,
             russian: itemToEdit.russian,
         });
+
         setRegexpValidation({ englishValid: '', transcriptionValid: '', russianValid: '' });
         setEmptyFieldError({ english: true, transcription: true, russian: true });
         setRowEditing(id);
@@ -50,26 +51,42 @@ export default function Table() {
         setRowEditing('');
     };
 
-    const handleSave = (id) => {
+    const handleSave = async (id) => {
         if (!isInputsFilled()) {
             return;
         } else {
-            const updatedWords = wordsData.map((item) => {
-                if (item.id === rowEditing) {
-                    return {
-                        ...item,
-                        english: inputValue.english,
-                        transcription: inputValue.transcription,
-                        russian: inputValue.russian,
-                    };
-                }
-                return item;
-            });
-            alert(
-                `Изменения внесены: слово - ${inputValue.english}, транскрипция - ${inputValue.transcription}, русский перевод - ${inputValue.russian}`,
-            );
-            setWordsData(updatedWords);
-            setRowEditing('');
+            const updatedWord = {
+                id: rowEditing,
+                tags: 'updatedWord',
+                tags_json: 'updatedWord',
+                english: inputValue.english,
+                transcription: inputValue.transcription,
+                russian: inputValue.russian,
+            };
+            try {
+                await updateWord(updatedWord);
+                toast('Слово изменено', {
+                    className: 'toast-message',
+                });
+                const updatedWords = wordsData.map((item) => {
+                    if (item.id === rowEditing) {
+                        return {
+                            ...item,
+                            english: inputValue.english,
+                            transcription: inputValue.transcription,
+                            russian: inputValue.russian,
+                        };
+                    }
+                    return item;
+                });
+                setWordsData(updatedWords);
+                setRowEditing('');
+            } catch (error) {
+                console.error('Ошибка при обновлении слова:', error);
+                toast('Ошибка при обновлении слова. Попробуйте еще раз.', {
+                    className: 'toast-message',
+                });
+            }
         }
     };
 
@@ -115,7 +132,7 @@ export default function Table() {
         try {
             await deleteWord(id);
             console.log('Слово удалено');
-            toast.success('Слово удалено', {
+            toast('Слово удалено', {
                 className: 'toast-message',
             });
             const newWordsData = [...wordsData].filter((item) => item.id !== id);
@@ -124,7 +141,7 @@ export default function Table() {
             console.error('Упс', error, {
                 className: 'toast-message',
             });
-            toast.error('Упс, что-то пошло не так! Попробуй еще раз', {
+            toast('Упс, что-то пошло не так! Попробуй еще раз', {
                 className: 'toast-message',
             });
         }
@@ -240,7 +257,6 @@ export default function Table() {
 
                                     <td>
                                         <button onClick={() => handleEdit(item.id)}>редактировать</button>
-                                        {/* <button onClick={() => deleteWord(item.id)}>удалить</button> */}
                                         <button onClick={() => handleDeleteWord(item.id)}>удалить</button>
                                     </td>
                                 </>
