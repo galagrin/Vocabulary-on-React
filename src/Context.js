@@ -3,7 +3,7 @@ import { Loader } from './Components/Loader/Loader';
 
 export const Context = createContext();
 
-export const ContextProvider = (props) => {
+export const ContextProvider = ({ children }) => {
     const [dictionary, setDictionary] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -99,5 +99,5 @@ export const ContextProvider = (props) => {
         return <Loader />;
     }
 
-    return <Context.Provider value={{ dictionary, isLoading, setDictionary, addNewWord, deleteWord, updateWord }}>{props.children}</Context.Provider>;
+    return <Context.Provider value={{ dictionary, isLoading, setDictionary, addNewWord, deleteWord, updateWord }}>{children}</Context.Provider>;
 };
