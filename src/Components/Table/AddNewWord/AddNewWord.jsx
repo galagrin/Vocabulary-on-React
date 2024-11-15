@@ -14,6 +14,7 @@ export const AddNewWord = ({ newWord, setNewWord, englishRegex, transcriptionReg
         setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }));
     };
 
+    //добавление слова
     const handleAddNewWord = async (e) => {
         let hasError = false;
         const newErrors = { english: '', transcription: '', russian: '' };
