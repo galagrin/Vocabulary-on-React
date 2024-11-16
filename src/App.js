@@ -6,7 +6,7 @@ import Table from './Components/Table/Table';
 import { CardCarousel } from './Components/CardCarousel/CardCarousel';
 import { RandomCard } from './Components/RandomCard/RandomCard';
 import { NotFound } from './Components/NotFound/NotFound';
-import { ContextProvider } from './Context.js';
+import { ContextProvider } from './store/Context';
 import { ToastContainer } from 'react-toastify';
 
 function App() {

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Context } from '../../../Context';
+import { Context } from '../../../store/Context';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './AddNewWord.css';

@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import Card from '../Card/Card';
 
-import { Context } from '../../Context.js';
+import { Context } from '../../store/Context.js';
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import backUp from '../../backUp.json';

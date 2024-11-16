@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { Loader } from './Components/Loader/Loader';
+import { Loader } from '../Components/Loader/Loader';
 
 export const Context = createContext();
 

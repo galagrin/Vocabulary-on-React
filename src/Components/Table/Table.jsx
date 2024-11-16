@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Context } from '../../Context.js';
+import { Context } from '../../store/Context.js';
 import backUp from '../../backUp.json';
 import { TableHead } from './TableHead/TableHead';
 import { SearchRow } from './SearchRow/SearchRow.jsx';

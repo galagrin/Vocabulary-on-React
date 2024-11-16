@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Context } from '../../Context.js';
+import { Context } from '../../store/Context.js';
 import Card from '../Card/Card';
 import { Button } from '../Button/Button';
 import backUp from '../../backUp.json';
