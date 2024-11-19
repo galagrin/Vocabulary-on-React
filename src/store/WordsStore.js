@@ -1,13 +1,18 @@
-import { createContext, useEffect, useState } from 'react';
-import { Loader } from '../Components/Loader/Loader';
+import { makeAutoObservable } from 'mobx';
+import backUp from '../backUp.json';
 
-export const Context = createContext();
+class WordsStore {
+    dictionary = [];
+    isLoading = false;
+    randomWord = null;
 
-export const ContextProvider = ({ children }) => {
-    const [dictionary, setDictionary] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    constructor() {
+        makeAutoObservable(this);
+        this.fetchWords();
+    }
 
-    useEffect(() => {
+    fetchWords = () => {
+        this.isLoading = true;
         fetch('http://itgirlschool.justmakeit.ru/api/words')
             .then((response) => {
                 if (response.ok) {
@@ -17,17 +22,24 @@ export const ContextProvider = ({ children }) => {
                 }
             })
             .then((data) => {
-                setDictionary(data);
+                this.dictionary = data;
+                this.getRandomWord();
             })
             .catch((error) => {
                 console.error('Error fetching words:', error);
+                this.dictionary = backUp;
             })
             .finally(() => {
-                setIsLoading(false);
+                this.isLoading = false;
             });
-    }, [dictionary]);
+    };
 
-    const addNewWord = (newWord) => {
+    getRandomWord = () => {
+        let randomIndex = Math.floor(Math.random() * this.dictionary.length);
+        this.randomWord = this.dictionary[randomIndex];
+    };
+
+    addNewWord = (newWord) => {
         fetch('http://itgirlschool.justmakeit.ru/api/words/add', {
             mode: 'no-cors',
             method: 'POST',
@@ -45,21 +57,20 @@ export const ContextProvider = ({ children }) => {
                 }
             })
             .then((addedWord) => {
-                setDictionary((prevDictionary) => [...prevDictionary, addedWord]);
+                this.dictionary.push(addedWord);
             })
             .catch((error) => {
                 console.error('Ошибка:', error.message);
             });
     };
 
-    const deleteWord = (id) => {
+    deleteWord = (id) => {
         fetch(`http://itgirlschool.justmakeit.ru/api/words/${id}/delete`, {
             method: 'POST',
         })
             .then((response) => {
                 if (response.ok) {
-                    const newDictionary = [...dictionary].filter((item) => item.id !== id);
-                    setDictionary(newDictionary);
+                    this.dictionary = this.dictionary.filter((item) => item.id !== id);
                 } else {
                     throw new Error('Ошибка удаления слова');
                 }
@@ -70,7 +81,7 @@ export const ContextProvider = ({ children }) => {
             });
     };
 
-    const updateWord = (updatedWord) => {
+    updateWord = (updatedWord) => {
         fetch(`http://itgirlschool.justmakeit.ru/api/words/${updatedWord.id}/update`, {
             method: 'POST',
             body: JSON.stringify(updatedWord),
@@ -88,16 +99,13 @@ export const ContextProvider = ({ children }) => {
                 }
             })
             .then((updatedWordResponse) => {
-                setDictionary((prevDictionary) => prevDictionary.map((word) => (word.id === updatedWordResponse.id ? updatedWordResponse : word)));
+                this.dictionary = this.dictionary.map((word) => (word.id === updatedWordResponse.id ? updatedWordResponse : word));
             })
             .catch((error) => {
                 console.error('Ошибка:', error.message);
             });
     };
+}
 
-    if (isLoading) {
-        return <Loader />;
-    }
-
-    return <Context.Provider value={{ dictionary, isLoading, setDictionary, addNewWord, deleteWord, updateWord }}>{children}</Context.Provider>;
-};
+const wordsStore = new WordsStore();
+export default wordsStore;

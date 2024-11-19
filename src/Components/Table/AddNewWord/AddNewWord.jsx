@@ -1,11 +1,11 @@
-import { useContext, useState } from 'react';
-import { Context } from '../../../store/Context';
+import { useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import wordsStore from '../../../store/WordsStore';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './AddNewWord.css';
 
-export const AddNewWord = ({ newWord, setNewWord, englishRegex, transcriptionRegex, russianRegex, wordsData, setWordsData }) => {
-    const { addNewWord } = useContext(Context);
+export const AddNewWord = observer(({ newWord, setNewWord, englishRegex, transcriptionRegex, russianRegex }) => {
     const [errors, setErrors] = useState({ english: '', transcription: '', russian: '' });
 
     const handleNewWord = (e) => {
@@ -52,12 +52,12 @@ export const AddNewWord = ({ newWord, setNewWord, englishRegex, transcriptionReg
 
         try {
             console.log(newWordObject);
-            await addNewWord(newWordObject);
+            await wordsStore.addNewWord(newWordObject);
             console.log('Слово добавлено');
             toast('Изменения сохранены', {
                 className: 'toast-message',
             });
-            setWordsData((prev) => [...prev, newWordObject]);
+            wordsStore.dictionary = [...wordsStore.dictionary, newWordObject];
         } catch (error) {
             console.error('Упс', error);
             toast('Упс, что-то пошло не так! Попробуй еще раз', {
@@ -78,7 +78,7 @@ export const AddNewWord = ({ newWord, setNewWord, englishRegex, transcriptionReg
                         placeholder="введите слово на английском"
                         value={newWord.english}
                         onChange={handleNewWord}
-                        className={errors.russian ? 'inputErrors' : ''}
+                        className={errors.english ? 'inputErrors' : ''}
                     />
                     {errors.english && <span className="validationError">{errors.english}</span>}
                 </td>
@@ -89,7 +89,7 @@ export const AddNewWord = ({ newWord, setNewWord, englishRegex, transcriptionReg
                         placeholder="введите транскрипцию"
                         value={newWord.transcription}
                         onChange={handleNewWord}
-                        className={errors.russian ? 'inputErrors' : ''}
+                        className={errors.transcription ? 'inputErrors' : ''}
                     />
                     {errors.transcription && <span className="validationError">{errors.transcription}</span>}
                 </td>
@@ -110,4 +110,4 @@ export const AddNewWord = ({ newWord, setNewWord, englishRegex, transcriptionReg
             </tr>
         </>
     );
-};
+});

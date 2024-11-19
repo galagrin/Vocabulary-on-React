@@ -1,25 +1,14 @@
-import { useState, useContext } from 'react';
-import { Context } from '../../store/Context.js';
+import { useState } from 'react';
 import Card from '../Card/Card';
 import { Button } from '../Button/Button';
-import backUp from '../../backUp.json';
-import './RandomCard.css';
+import { observer } from 'mobx-react-lite';
+import wordsStore from '../../store/WordsStore.js';
 import { Loader } from '../Loader/Loader.jsx';
+import './RandomCard.css';
 
-export const RandomCard = () => {
-    const { dictionary, isLoading } = useContext(Context);
+export const RandomCard = observer(() => {
     const [rolledOut, setRolledOut] = useState(false);
     const [flipped, setFlipped] = useState(false);
-
-    // future backup option
-    const wordsData = dictionary.length ? dictionary : backUp;
-
-    const getRandomWord = () => {
-        let randomIndex = Math.floor(Math.random() * wordsData.length);
-        return wordsData[randomIndex];
-    };
-
-    const [randomWord, setRandomWord] = useState(getRandomWord());
 
     // переворот карточки
     const handleClick = () => {
@@ -29,13 +18,17 @@ export const RandomCard = () => {
     const handleRandomClick = () => {
         setRolledOut(true);
         setTimeout(() => setRolledOut(false), 500);
-        setRandomWord(getRandomWord());
+        // получаем из стора случайное слово
+        wordsStore.getRandomWord();
         setFlipped(false);
     };
 
-    if (isLoading) {
+    if (wordsStore.isLoading) {
         return <Loader />;
     }
+
+    const randomWord = wordsStore.randomWord;
+
     return (
         <div className="cardwrapper">
             <Card
@@ -49,4 +42,4 @@ export const RandomCard = () => {
             <Button className="random-btn" onClick={handleRandomClick} text="Еще одно случайное слово" />
         </div>
     );
-};
+});
