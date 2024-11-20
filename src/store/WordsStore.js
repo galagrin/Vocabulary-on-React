@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import backUp from '../backUp.json';
 
 class WordsStore {
@@ -30,7 +30,9 @@ class WordsStore {
                 this.dictionary = backUp;
             })
             .finally(() => {
-                this.isLoading = false;
+                runInAction(() => {
+                    this.isLoading = false;
+                });
             });
     };
 
@@ -57,7 +59,9 @@ class WordsStore {
                 }
             })
             .then((addedWord) => {
-                this.dictionary.push(addedWord);
+                runInAction(() => {
+                    this.dictionary.push(addedWord);
+                });
             })
             .catch((error) => {
                 console.error('Ошибка:', error.message);
@@ -70,7 +74,9 @@ class WordsStore {
         })
             .then((response) => {
                 if (response.ok) {
-                    this.dictionary = this.dictionary.filter((item) => item.id !== id);
+                    runInAction(() => {
+                        this.dictionary = this.dictionary.filter((item) => item.id !== id);
+                    });
                 } else {
                     throw new Error('Ошибка удаления слова');
                 }
@@ -99,7 +105,9 @@ class WordsStore {
                 }
             })
             .then((updatedWordResponse) => {
-                this.dictionary = this.dictionary.map((word) => (word.id === updatedWordResponse.id ? updatedWordResponse : word));
+                runInAction(() => {
+                    this.dictionary = this.dictionary.map((word) => (word.id === updatedWordResponse.id ? updatedWordResponse : word));
+                });
             })
             .catch((error) => {
                 console.error('Ошибка:', error.message);
