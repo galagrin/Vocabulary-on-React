@@ -38,3 +38,8 @@
     transform: translateY(3px);
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 }
+
+.warningBtncontainer button:focus {
+    outline: none;
+    border: 2px solid #859e9b;
+}

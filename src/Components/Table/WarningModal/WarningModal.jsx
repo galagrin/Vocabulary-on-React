@@ -1,4 +1,5 @@
 import Modal from 'react-modal';
+import { useRef } from 'react';
 import './WarningModal.css';
 
 const customStyles = {
@@ -17,7 +18,10 @@ const customStyles = {
         boxShadow: '8px 8px 12px rgba(0, 0, 0, 10%)',
     },
 };
+
 export const WarningModal = ({ showModal, setShowModal, wordToDelete, setWordToDelete, handleDeleteWord }) => {
+    const ref = useRef();
+
     return (
         <Modal
             isOpen={showModal}
@@ -25,6 +29,11 @@ export const WarningModal = ({ showModal, setShowModal, wordToDelete, setWordToD
             style={customStyles}
             onRequestClose={() => {
                 setShowModal(false);
+            }}
+            onAfterOpen={() => {
+                if (ref.current) {
+                    ref.current.focus(); // Устанавливаем фокус на кнопку после открытия модального окна
+                }
             }}
         >
             <div className="warningwrap">
@@ -37,6 +46,7 @@ export const WarningModal = ({ showModal, setShowModal, wordToDelete, setWordToD
                             setShowModal(false);
                             setWordToDelete(null);
                         }}
+                        ref={ref}
                     >
                         Нет, отмени!
                     </button>
