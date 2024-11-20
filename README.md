@@ -19,7 +19,7 @@ Welcome to the English Vocabulary Learning App! This application is designed to 
 
 - **Reset Counter**: Easily reset the study counter with a button click.
 
-- **User  Information Modal**: A modal window provides guidance on what actions users can take on each page, enhancing user experience.
+- **User  Information Modal**: A modal window provides guidance on what actions users can take on game page, enhancing user experience.
 
 
 
