@@ -4,7 +4,7 @@ Welcome to the English Vocabulary Learning App! This application is designed to 
 
 ## Features
 
-- **Word List Management**: Fetch a list of English words from an API. Users can add, edit, and delete words from their vocabulary list.
+- **Word List Management**: Fetch a list of English words from an API. Users can add, edit, and delete words with real-time validation and error handling from  vocabulary list.
   
 - **Routing**: Navigate seamlessly between different pages:
   - **Main Page**: Displays a table of words.
