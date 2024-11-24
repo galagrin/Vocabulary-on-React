@@ -1,13 +1,13 @@
-# English Vocabulary Learning App
+# English Vocabulary Learning App 📚📖
 
 Welcome to the English Vocabulary Learning App! This application is designed to help users learn and practice English words in an interactive and engaging way. Built with React.js, the app allows users to manage their vocabulary effectively through various features.
 
 ## Features
 
-- **Word List Management**: Fetch a list of English words from an API. Users can add, edit, and delete words with real-time validation and error handling from  vocabulary list.
+- **Word List Management**: Fetch a list of English words from an API. Users can add, edit, and delete words with real-time validation and error handling.
   
 - **Routing**: Navigate seamlessly between different pages:
-  - **Main Page**: Displays a table of words.
+  - **Main Page**: Displays a CRUD table of words.
   - **Flashcards Page**: Showcases words in a flashcard format.
   - **Random Word Page**: Presents a random word for quick practice.
 
