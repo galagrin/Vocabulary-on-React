@@ -163,7 +163,7 @@ export const AddNewWord = observer(({ newWord, setNewWord, englishRegex, transcr
             console.log(newWordObject);
             await wordsStore.addNewWord(newWordObject);
             console.log('Слово добавлено');
-            toast('Изменения сохранены', {
+            toast('Изменения сохранены, новое слово добавлено', {
                 className: 'toast-message',
             });
             wordsStore.dictionary = [...wordsStore.dictionary, newWordObject];

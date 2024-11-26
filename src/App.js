@@ -11,6 +11,8 @@ import { ToastContainer } from 'react-toastify';
 import wordsStore from './store/WordsStore';
 import { Provider } from 'mobx-react';
 
+import { Banner } from './Components/Banner/Banner';
+
 function App() {
     return (
         <Provider {...wordsStore}>
@@ -20,6 +22,7 @@ function App() {
                     <main className="main">
                         <Routes>
                             <Route path="/" element={<Table />} />
+                            <Route path="/landing" element={<Banner />} />
                             <Route path="/game" element={<CardCarousel />} />
                             <Route path="/random" element={<RandomCard />} />
                             <Route path="*" element={<NotFound />}></Route>

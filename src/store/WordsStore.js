@@ -22,12 +22,16 @@ class WordsStore {
                 }
             })
             .then((data) => {
-                this.dictionary = data;
-                this.getRandomWord();
+                runInAction(() => {
+                    this.dictionary = data;
+                    this.getRandomWord();
+                });
             })
             .catch((error) => {
                 console.error('Error fetching words:', error);
-                this.dictionary = backUp;
+                runInAction(() => {
+                    this.dictionary = backUp;
+                });
             })
             .finally(() => {
                 runInAction(() => {
