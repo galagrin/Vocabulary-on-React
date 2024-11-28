@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { TableHead } from './TableHead/TableHead';
 import { SearchRow } from './SearchRow/SearchRow.jsx';
 import { Loader } from '../Loader/Loader.jsx';
@@ -180,7 +180,7 @@ export const Table = observer(() => {
         setSearch(e.target.value);
     };
 
-    const visibleData = searchEnglish(wordsStore.dictionary, search);
+    const visibleData = useMemo(() => searchEnglish(wordsStore.dictionary, search), [search]);
 
     if (wordsStore.isLoading) {
         return <Loader />;
