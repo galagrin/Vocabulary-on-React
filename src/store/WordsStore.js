@@ -12,6 +12,10 @@ class WordsStore {
     }
 
     fetchWords = () => {
+        if (this.dictionary.length > 0) {
+            return;
+        }
+
         this.isLoading = true;
         fetch('http://itgirlschool.justmakeit.ru/api/words')
             .then((response) => {
