@@ -1,18 +1,20 @@
-import { useState } from 'react';
-import data from '../../data.json';
+import { useState, useContext } from 'react';
+import { Context } from '../../store/Context.js';
 import backUp from '../../backUp.json';
 import { TableHead } from './TableHead/TableHead';
+import { SearchRow } from './SearchRow/SearchRow.jsx';
+import { Loader } from '../Loader/Loader.jsx';
+import { AddNewWord } from './AddNewWord/AddNewWord.jsx';
+import { toast } from 'react-toastify';
+
 import './Table.css';
 
 export default function Table() {
+    const { dictionary, isLoading, deleteWord, updateWord } = useContext(Context);
     const [rowEditing, setRowEditing] = useState('');
     const [inputValue, setInputValue] = useState({ english: '', transcription: '', russian: '' });
 
-    const [emptyFieldError, setEmptyFieldError] = useState({
-        english: false,
-        transcription: false,
-        russian: false,
-    });
+    const [emptyFieldError, setEmptyFieldError] = useState({ english: false, transcription: false, russian: false });
 
     // состояние поиска слова
     const [search, setSearch] = useState('');
@@ -23,133 +25,142 @@ export default function Table() {
         transcriptionValid: '',
         russianValid: '',
     });
-    // Состояние добавления Нового слова
 
     const [newWord, setNewWord] = useState({ english: '', transcription: '', russian: '' });
+    const [wordsData, setWordsData] = useState(dictionary.length ? dictionary : backUp);
 
-    // future backup option
-    // const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
-    const [wordsData, setWordsData] = useState(data.length ? data : backUp);
+    const englishRegex = /^[A-Za-z\s+]+$/;
+    const transcriptionRegex = /^\[[a-zA-Zˈˌːˑˈˌːˑæʃɪʊɛɒʊʌɹɡʔʊəʤɔ:iː,ˈʧ\s+]*\]$/;
+    const russianRegex = /^[А-Яа-яЁё\s+]+$/;
 
-    // кнопка редактировать
-    function handleClick(id) {
+    function handleEdit(id) {
         const itemToEdit = wordsData.find((item) => item.id === id);
         setInputValue({
             english: itemToEdit.english,
             transcription: itemToEdit.transcription,
             russian: itemToEdit.russian,
         });
+
         setRegexpValidation({ englishValid: '', transcriptionValid: '', russianValid: '' });
         setEmptyFieldError({ english: true, transcription: true, russian: true });
         setRowEditing(id);
     }
-    // кнопка отмена
+
     const handleCancel = () => {
-        setInputValue(!inputValue);
-        setRowEditing({ english: '', transcription: '', russian: '' });
+        setInputValue({ english: '', transcription: '', russian: '' });
+        setRowEditing('');
     };
 
-    // кнопка сохранить
-    const handleSave = (id) => {
-        if (!isInputsFilled) {
-            alert('пустое поле');
+    const handleSave = async (id) => {
+        if (!isInputsFilled()) {
             return;
         } else {
-            // записываем изменения в состояния wordsData и возвращаем item
-            const updatedWords = wordsData.map((item) => {
-                if (item.id === rowEditing) {
-                    return {
-                        ...item,
-                        english: inputValue.english,
-                        transcription: inputValue.transcription,
-                        russian: inputValue.russian,
-                    };
-                }
-                return item;
+            const updatedWord = {
+                id: rowEditing,
+                tags: 'updatedWord',
+                tags_json: 'updatedWord',
+                english: inputValue.english,
+                transcription: inputValue.transcription,
+                russian: inputValue.russian,
+            };
+            try {
+                await updateWord(updatedWord);
+                toast('Слово изменено', {
+                    className: 'toast-message',
+                });
+                const updatedWords = wordsData.map((item) => {
+                    if (item.id === rowEditing) {
+                        return {
+                            ...item,
+                            english: inputValue.english,
+                            transcription: inputValue.transcription,
+                            russian: inputValue.russian,
+                        };
+                    }
+                    return item;
+                });
+                setWordsData(updatedWords);
+                setRowEditing('');
+            } catch (error) {
+                console.error('Ошибка при обновлении слова:', error);
+                toast('Ошибка при обновлении слова. Попробуйте еще раз.', {
+                    className: 'toast-message',
+                });
+            }
+        }
+    };
+
+    const handleInputChange = (e, regexErrorMessage) => {
+        const { name, value } = e.target;
+        const emptyErrorMessage = 'поле не должно быть пустым';
+        setInputValue((prevValue) => ({ ...prevValue, [name]: value }));
+
+        // Проверка на пустое поле
+        if (value.trim() === '') {
+            setRegexpValidation((prev) => ({
+                ...prev,
+                [`${name}Valid`]: emptyErrorMessage,
+            }));
+            setEmptyFieldError((prevValue) => ({ ...prevValue, [name]: false }));
+        } else {
+            let regex;
+            if (name === 'english') {
+                regex = englishRegex;
+            } else if (name === 'transcription') {
+                regex = transcriptionRegex;
+            } else if (name === 'russian') {
+                regex = russianRegex;
+            }
+
+            // Проверка на валидность по регулярному выражению
+            if (!regex.test(value.trim())) {
+                setRegexpValidation((prev) => ({
+                    ...prev,
+                    [`${name}Valid`]: regexErrorMessage,
+                }));
+                setEmptyFieldError((prevValue) => ({ ...prevValue, [name]: true }));
+            } else {
+                setEmptyFieldError((prevValue) => ({ ...prevValue, [name]: true }));
+                setRegexpValidation((prev) => ({
+                    ...prev,
+                    [`${name}Valid`]: '',
+                }));
+            }
+        }
+    };
+    const handleDeleteWord = async (id) => {
+        try {
+            await deleteWord(id);
+            console.log('Слово удалено');
+            toast('Слово удалено', {
+                className: 'toast-message',
             });
-            alert(`Изменения внесены: слово - ${inputValue.english}, транскрипция - ${inputValue.transcription}, русский перевод - ${inputValue.russian}`);
-            setWordsData(updatedWords);
-            setRowEditing('');
+            const newWordsData = [...wordsData].filter((item) => item.id !== id);
+            setWordsData(newWordsData);
+        } catch (error) {
+            console.error('Упс', error, {
+                className: 'toast-message',
+            });
+            toast('Упс, что-то пошло не так! Попробуй еще раз', {
+                className: 'toast-message',
+            });
         }
     };
-
-    // инпут английский
-    const handleEnglishEdit = (id, e) => {
-        setInputValue((prevValue) => ({ ...prevValue, [e.target.name]: e.target.value }));
-        const englishRegex = /^[A-Za-z\s+]+$/;
-
-        if (e.target.value.trim() === '') {
-            setRegexpValidation((prev) => ({
-                ...prev,
-                englishValid: 'поле не должно быть пустым',
-            }));
-        } else if (!englishRegex.test(e.target.value.trim())) {
-            setRegexpValidation((prev) => ({
-                ...prev,
-                englishValid: 'поле должно содержать английские буквы',
-            }));
-        } else {
-            setEmptyFieldError((prevValue) => ({ ...prevValue, [e.target.name]: true }));
-            setRegexpValidation((prev) => ({
-                ...prev,
-                englishValid: '',
-            }));
-        }
+    // проверка заполнения инпутов и валидности для disabled на кнопке
+    const isInputsFilled = () => {
+        return (
+            inputValue.english &&
+            inputValue.english.trim() !== '' &&
+            inputValue.transcription &&
+            inputValue.transcription.trim() !== '' &&
+            inputValue.russian &&
+            inputValue.russian.trim() !== '' &&
+            regexpValidation.englishValid === '' &&
+            regexpValidation.transcriptionValid === '' &&
+            regexpValidation.russianValid === ''
+        );
     };
 
-    // инпут транскрипция
-    const handleTranscriptionEdit = (id, e) => {
-        setInputValue((prevValue) => ({
-            ...prevValue,
-            [e.target.name]: e.target.value,
-        }));
-        const transcriptionRegex = /^\[[a-zA-Zˈˌːˑˈˌːˑæʃɪʊɛɒʊʌɹɡʔʊəʤː\s+]*\]$/;
-
-        if (e.target.value.trim() === '') {
-            setRegexpValidation((prev) => ({
-                ...prev,
-                transcriptionValid: 'поле не должно быть пустым',
-            }));
-        } else if (!transcriptionRegex.test(e.target.value.trim())) {
-            setRegexpValidation((prev) => ({
-                ...prev,
-                transcriptionValid: 'поле должно содержать английские буквы и символы []',
-            }));
-        } else {
-            setEmptyFieldError((prevValue) => ({ ...prevValue, [e.target.name]: true }));
-            setRegexpValidation((prev) => ({
-                ...prev,
-                transcriptionValid: '',
-            }));
-        }
-    };
-    // инпут перевод
-    const handleRussianEdit = (id, e) => {
-        setInputValue((prevValue) => ({ ...prevValue, [e.target.name]: e.target.value }));
-        const russianRegex = /^[А-Яа-яЁё\s+]+$/;
-
-        if (e.target.value.trim() === '') {
-            setRegexpValidation((prev) => ({
-                ...prev,
-                russianValid: 'поле не должно быть пустым',
-            }));
-        } else if (!russianRegex.test(e.target.value.trim())) {
-            setRegexpValidation((prev) => ({
-                ...prev,
-                russianValid: 'поле должно содержать русские буквы',
-            }));
-        } else {
-            setEmptyFieldError((prevValue) => ({ ...prevValue, [e.target.name]: true }));
-            setRegexpValidation((prev) => ({ ...prev, russianValid: '' }));
-        }
-    };
-
-    // проверка заполнения инпутов
-    const isInputsFilled = (id) => {
-        return inputValue.english && inputValue.english.trim() !== '' && inputValue.transcription && inputValue.transcription.trim() !== '' && inputValue.russian && inputValue.russian.trim() !== '';
-    };
-
-    // функция поиска английского слова
     const searchEnglish = (data, search) => {
         if (search.length === 0) {
             return data;
@@ -158,107 +169,102 @@ export default function Table() {
             return item.english.indexOf(search) > -1;
         });
     };
-    // инпут поиска слова
+
     const onUpdateSearch = (e) => {
         setSearch(e.target.value);
     };
 
-    const handleNewWord = (e) => {
-        setNewWord((prevValue) => ({ ...prevValue, [e.target.name]: e.target.value }));
-        console.log(newWord);
-    };
-    const handleAddNewWord = () => {
-        setNewWord({ english: '', transcription: '', russian: '' });
-    };
-    // данные с учетом поиска слова
     const visibleData = searchEnglish(wordsData, search);
 
+    if (isLoading) {
+        return <Loader />;
+    }
     return (
-        <table>
-            <TableHead />
-            <tbody>
-                <tr>
-                    <td className="searchrow">
-                        <input type="text" placeholder="найти слово" onChange={(e) => onUpdateSearch(e)} />
-                    </td>
-                </tr>
-                <tr className="newword-row">
-                    <td>
-                        <input type="text" name="english" placeholder="введите слово на английском" value={newWord.english} onChange={(e) => handleNewWord(e)} />
-                    </td>
-                    <td>
-                        <input type="text" name="transcription" placeholder="введите транскрипцию" value={newWord.transcription} onChange={(e) => handleNewWord(e)} />
-                    </td>
-                    <td>
-                        <input type="text" name="russian" placeholder="введите перевод" value={newWord.russian} onChange={(e) => handleNewWord(e)} />
-                    </td>
-                    <td>
-                        <button onClick={handleAddNewWord}>добавить новое слово</button>
-                    </td>
-                </tr>
+        <>
+            <table>
+                <TableHead />
+                <tbody>
+                    <SearchRow onChange={(e) => onUpdateSearch(e)} />
 
-                {visibleData.map((item) => (
-                    <tr key={item.id}>
-                        {rowEditing === item.id ? (
-                            <>
-                                <td>
-                                    <input
-                                        type="text"
-                                        name="english"
-                                        value={inputValue.english || ''}
-                                        placeholder={item.english}
-                                        onChange={(e) => handleEnglishEdit(item.id, e)}
-                                        className={!emptyFieldError.english ? 'inputErrors' : ''}
-                                    />
-                                    {regexpValidation.englishValid[item.id] !== '' && <div className="validationError">{regexpValidation.englishValid}</div>}
-                                </td>
+                    <AddNewWord
+                        newWord={newWord}
+                        setNewWord={setNewWord}
+                        englishRegex={englishRegex}
+                        transcriptionRegex={transcriptionRegex}
+                        russianRegex={russianRegex}
+                        wordsData={wordsData}
+                        setWordsData={setWordsData}
+                    />
 
-                                <td>
-                                    <input
-                                        type="text"
-                                        name="transcription"
-                                        value={inputValue.transcription || ''}
-                                        placeholder={item.transcription}
-                                        onChange={(e) => handleTranscriptionEdit(item.id, e)}
-                                        className={!emptyFieldError.transcription ? 'inputErrors' : ''}
-                                    />
-                                    {regexpValidation.transcriptionValid[item.id] !== '' && <div className="validationError">{regexpValidation.transcriptionValid}</div>}
-                                </td>
+                    {visibleData.map((item) => (
+                        <tr key={item.id}>
+                            {rowEditing === item.id ? (
+                                <>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="english"
+                                            value={inputValue.english || ''}
+                                            placeholder={item.english}
+                                            onChange={(e) => handleInputChange(e, 'поле должно содержать английские буквы')}
+                                            className={!emptyFieldError.english || regexpValidation.englishValid ? 'inputErrors' : ''}
+                                        />
+                                        {regexpValidation.englishValid && <span className="validationError">{regexpValidation.englishValid}</span>}
+                                    </td>
 
-                                <td>
-                                    <input
-                                        type="text"
-                                        name="russian"
-                                        value={inputValue.russian || ''}
-                                        placeholder={item.russian}
-                                        onChange={(e) => handleRussianEdit(item.id, e)}
-                                        className={!emptyFieldError.russian ? 'inputErrors' : ''}
-                                    />
-                                    {regexpValidation.russianValid[item.id] !== '' && <div className="validationError">{regexpValidation.russianValid}</div>}
-                                </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="transcription"
+                                            value={inputValue.transcription || ''}
+                                            placeholder={item.transcription}
+                                            onChange={(e) => handleInputChange(e, 'поле должно содержать английские буквы и символы []')}
+                                            className={!emptyFieldError.transcription || regexpValidation.transcriptionValid ? 'inputErrors' : ''}
+                                        />
+                                        {regexpValidation.transcriptionValid && (
+                                            <span className="validationError">{regexpValidation.transcriptionValid}</span>
+                                        )}
+                                    </td>
 
-                                <td>
-                                    <button onClick={handleSave} disabled={!isInputsFilled(item.id)} className={!isInputsFilled(item.id) ? 'inactive' : ''}>
-                                        сохранить
-                                    </button>
-                                    <button onClick={handleCancel}>отменить</button>
-                                </td>
-                            </>
-                        ) : (
-                            <>
-                                <td>{item.english}</td>
-                                <td>{item.transcription}</td>
-                                <td>{item.russian}</td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="russian"
+                                            value={inputValue.russian || ''}
+                                            placeholder={item.russian}
+                                            onChange={(e) => handleInputChange(e, 'поле должно содержать русские буквы')}
+                                            className={!emptyFieldError.russian || regexpValidation.russianValid ? 'inputErrors' : ''}
+                                        />
+                                        {regexpValidation.russianValid && <span className="validationError">{regexpValidation.russianValid}</span>}
+                                    </td>
 
-                                <td>
-                                    <button onClick={() => handleClick(item.id)}>редактировать</button>
-                                    <button>удалить</button>
-                                </td>
-                            </>
-                        )}
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+                                    <td>
+                                        <button
+                                            onClick={() => handleSave(item.id)}
+                                            disabled={!isInputsFilled()}
+                                            className={!isInputsFilled() ? 'inactive' : ''}
+                                        >
+                                            сохранить
+                                        </button>
+                                        <button onClick={handleCancel}>отменить</button>
+                                    </td>
+                                </>
+                            ) : (
+                                <>
+                                    <td>{item.english}</td>
+                                    <td>{item.transcription}</td>
+                                    <td>{item.russian}</td>
+
+                                    <td>
+                                        <button onClick={() => handleEdit(item.id)}>редактировать</button>
+                                        <button onClick={() => handleDeleteWord(item.id)}>удалить</button>
+                                    </td>
+                                </>
+                            )}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </>
     );
 }

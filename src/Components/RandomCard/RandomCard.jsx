@@ -1,16 +1,18 @@
-import { useState } from 'react';
-import data from '../../data.json';
+import { useState, useContext } from 'react';
+import { Context } from '../../store/Context.js';
 import Card from '../Card/Card';
 import { Button } from '../Button/Button';
 import backUp from '../../backUp.json';
 import './RandomCard.css';
+import { Loader } from '../Loader/Loader.jsx';
 
 export const RandomCard = () => {
+    const { dictionary, isLoading } = useContext(Context);
     const [rolledOut, setRolledOut] = useState(false);
     const [flipped, setFlipped] = useState(false);
 
     // future backup option
-    const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
+    const wordsData = dictionary.length ? dictionary : backUp;
 
     const getRandomWord = () => {
         let randomIndex = Math.floor(Math.random() * wordsData.length);
@@ -31,6 +33,9 @@ export const RandomCard = () => {
         setFlipped(false);
     };
 
+    if (isLoading) {
+        return <Loader />;
+    }
     return (
         <div className="cardwrapper">
             <Card
@@ -41,11 +46,7 @@ export const RandomCard = () => {
                 handleClick={handleClick}
                 flipped={flipped}
             />
-            <Button
-                className="random-btn"
-                onClick={handleRandomClick}
-                text="Еще одно случайное слово"
-            />
+            <Button className="random-btn" onClick={handleRandomClick} text="Еще одно случайное слово" />
         </div>
     );
 };

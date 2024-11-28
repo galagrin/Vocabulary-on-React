@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import './header.css';
 import { Hamburger } from '../Hamburger/Hamberger';
 
+
 export const Header = () => {
     const [showNavbar, setShowNavbar] = useState(false);
 
@@ -47,6 +48,7 @@ export const Header = () => {
                     </li>
                 </ul>
             </nav>
+            
         </header>
     );
 };
