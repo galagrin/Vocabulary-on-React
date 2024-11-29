@@ -21,8 +21,10 @@ function App() {
                     <Header />
                     <main className="main">
                         <Routes>
-                            <Route path="/" element={<Table />} />
-                            <Route path="/landing" element={<Banner />} />
+                            {/* <Route path="/" element={<Table />} />
+                            <Route path="/landing" element={<Banner />} /> */}
+                            <Route path="/" element={<Banner />} />
+                            <Route path="/main" element={<Table />} />
                             <Route path="/game" element={<CardCarousel />} />
                             <Route path="/random" element={<RandomCard />} />
                             <Route path="*" element={<NotFound />}></Route>

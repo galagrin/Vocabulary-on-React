@@ -180,7 +180,8 @@ export const Table = observer(() => {
         setSearch(e.target.value);
     };
 
-    const visibleData = useMemo(() => searchEnglish(wordsStore.dictionary, search), [search]);
+    // const visibleData = useMemo(() => searchEnglish(wordsStore.dictionary, search), [search]);
+    const visibleData = searchEnglish(wordsStore.dictionary, search);
 
     if (wordsStore.isLoading) {
         return <Loader />;
