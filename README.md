@@ -23,7 +23,5 @@ Welcome to the English Vocabulary Learning App! This application is designed to 
 - **User  Information Modal**: A modal window provides guidance on what actions users can take on game page, enhancing user experience.
 
 
-
-
-
-
+<img src="https://github.com/user-attachments/assets/9826a020-6acc-43ef-8e63-595d940eb1ba" width="400">
+<img src="https://github.com/user-attachments/assets/3a1e658e-2686-4d4c-9cc9-19f4b0bba881" width="400">
