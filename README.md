@@ -1,3 +1,4 @@
+
 # English Vocabulary Learning App 📚📖
 
 Welcome to the English Vocabulary Learning App! This application is designed to help users learn and practice English words in an interactive and engaging way. Built with React.js, the app allows users to manage their vocabulary effectively through various features.
@@ -20,7 +21,6 @@ Welcome to the English Vocabulary Learning App! This application is designed to 
 - **Reset Counter**: Easily reset the study counter with a button click.
 
 - **User  Information Modal**: A modal window provides guidance on what actions users can take on game page, enhancing user experience.
-
 
 
 

@@ -1,17 +1,15 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import Card from '../Card/Card';
-
-import { Context } from '../../store/Context.js';
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
-import backUp from '../../backUp.json';
+import { observer } from 'mobx-react-lite';
+import wordsStore from '../../store/WordsStore.js';
 
-import './CardCarousel.css';
 import { Counter } from './Counter/Counter';
 import { Loader } from '../Loader/Loader.jsx';
+import './CardCarousel.css';
 
-export const CardCarousel = () => {
-    const { dictionary, isLoading } = useContext(Context);
+export const CardCarousel = observer(() => {
     const [wordIndex, setWordIndex] = useState(0);
     const [rolledOut, setRolledOut] = useState(false);
     const [count, setCount] = useState(0);
@@ -31,9 +29,7 @@ export const CardCarousel = () => {
         setFlipped(!flipped);
     };
 
-    // future backup option
-    // const wordsData = Array.isArray(data) && data.length > 0 ? data : backUp;
-    const wordsData = dictionary.length ? dictionary : backUp;
+    const wordsData = wordsStore.dictionary;
 
     // переключение на следующую карточку и переворот на англ
     const handleNextWord = () => {
@@ -69,7 +65,7 @@ export const CardCarousel = () => {
         window.localStorage.clear();
         setCount(0);
     };
-    if (isLoading) {
+    if (wordsStore.isLoading) {
         return <Loader />;
     }
     return (
@@ -105,4 +101,4 @@ export const CardCarousel = () => {
             <Counter count={count} onClick={handleResetWordsCount} />
         </div>
     );
-};
+});

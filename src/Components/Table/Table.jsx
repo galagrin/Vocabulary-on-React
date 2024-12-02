@@ -1,16 +1,15 @@
-import { useState, useContext } from 'react';
-import { Context } from '../../store/Context.js';
-import backUp from '../../backUp.json';
+import { useEffect, useState, useMemo } from 'react';
 import { TableHead } from './TableHead/TableHead';
 import { SearchRow } from './SearchRow/SearchRow.jsx';
 import { Loader } from '../Loader/Loader.jsx';
 import { AddNewWord } from './AddNewWord/AddNewWord.jsx';
 import { toast } from 'react-toastify';
-
+import { observer } from 'mobx-react';
+import wordsStore from '../../store/WordsStore.js';
 import './Table.css';
+import { WarningModal } from './WarningModal/WarningModal.jsx';
 
-export default function Table() {
-    const { dictionary, isLoading, deleteWord, updateWord } = useContext(Context);
+export const Table = observer(() => {
     const [rowEditing, setRowEditing] = useState('');
     const [inputValue, setInputValue] = useState({ english: '', transcription: '', russian: '' });
 
@@ -27,14 +26,19 @@ export default function Table() {
     });
 
     const [newWord, setNewWord] = useState({ english: '', transcription: '', russian: '' });
-    const [wordsData, setWordsData] = useState(dictionary.length ? dictionary : backUp);
+    const [showModal, setShowModal] = useState(false);
+    const [wordToDelete, setWordToDelete] = useState(null);
+
+    useEffect(() => {
+        wordsStore.fetchWords();
+    }, []);
 
     const englishRegex = /^[A-Za-z\s+]+$/;
     const transcriptionRegex = /^\[[a-zA-Zˈˌːˑˈˌːˑæʃɪʊɛɒʊʌɹɡʔʊəʤɔ:iː,ˈʧ\s+]*\]$/;
     const russianRegex = /^[А-Яа-яЁё\s+]+$/;
 
     function handleEdit(id) {
-        const itemToEdit = wordsData.find((item) => item.id === id);
+        const itemToEdit = wordsStore.dictionary.find((item) => item.id === id);
         setInputValue({
             english: itemToEdit.english,
             transcription: itemToEdit.transcription,
@@ -64,11 +68,11 @@ export default function Table() {
                 russian: inputValue.russian,
             };
             try {
-                await updateWord(updatedWord);
+                await wordsStore.updateWord(updatedWord);
                 toast('Слово изменено', {
                     className: 'toast-message',
                 });
-                const updatedWords = wordsData.map((item) => {
+                const updatedWords = wordsStore.dictionary.map((item) => {
                     if (item.id === rowEditing) {
                         return {
                             ...item,
@@ -79,7 +83,7 @@ export default function Table() {
                     }
                     return item;
                 });
-                setWordsData(updatedWords);
+                wordsStore.dictionary = updatedWords;
                 setRowEditing('');
             } catch (error) {
                 console.error('Ошибка при обновлении слова:', error);
@@ -130,17 +134,19 @@ export default function Table() {
     };
     const handleDeleteWord = async (id) => {
         try {
-            await deleteWord(id);
+            await wordsStore.deleteWord(id);
             console.log('Слово удалено');
             toast('Слово удалено', {
                 className: 'toast-message',
             });
-            const newWordsData = [...wordsData].filter((item) => item.id !== id);
-            setWordsData(newWordsData);
+            const newWordsData = wordsStore.dictionary.filter((item) => item.id !== id);
+            wordsStore.dictionary = newWordsData;
+            setShowModal(false);
         } catch (error) {
             console.error('Упс', error, {
                 className: 'toast-message',
             });
+
             toast('Упс, что-то пошло не так! Попробуй еще раз', {
                 className: 'toast-message',
             });
@@ -174,13 +180,23 @@ export default function Table() {
         setSearch(e.target.value);
     };
 
-    const visibleData = searchEnglish(wordsData, search);
+    // const visibleData = useMemo(() => searchEnglish(wordsStore.dictionary, search), [search]);
+    const visibleData = searchEnglish(wordsStore.dictionary, search);
 
-    if (isLoading) {
+    if (wordsStore.isLoading) {
         return <Loader />;
     }
+
     return (
         <>
+            <WarningModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                wordToDelete={wordToDelete}
+                setWordToDelete={setWordToDelete}
+                handleDeleteWord={handleDeleteWord}
+            />
+
             <table>
                 <TableHead />
                 <tbody>
@@ -192,8 +208,6 @@ export default function Table() {
                         englishRegex={englishRegex}
                         transcriptionRegex={transcriptionRegex}
                         russianRegex={russianRegex}
-                        wordsData={wordsData}
-                        setWordsData={setWordsData}
                     />
 
                     {visibleData.map((item) => (
@@ -257,7 +271,14 @@ export default function Table() {
 
                                     <td>
                                         <button onClick={() => handleEdit(item.id)}>редактировать</button>
-                                        <button onClick={() => handleDeleteWord(item.id)}>удалить</button>
+                                        <button
+                                            onClick={() => {
+                                                setWordToDelete(item.id);
+                                                setShowModal(true);
+                                            }}
+                                        >
+                                            удалить
+                                        </button>
                                     </td>
                                 </>
                             )}
@@ -267,4 +288,4 @@ export default function Table() {
             </table>
         </>
     );
-}
+});

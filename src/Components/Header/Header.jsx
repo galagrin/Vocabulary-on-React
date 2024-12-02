@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import './header.css';
 import { Hamburger } from '../Hamburger/Hamberger';
 
-
 export const Header = () => {
     const [showNavbar, setShowNavbar] = useState(false);
 
@@ -32,7 +31,7 @@ export const Header = () => {
                 </div>
                 <ul className={`navlist ${showNavbar && 'active'}`}>
                     <li>
-                        <NavLink className={getActiveClass} to="/" onClick={closeNavbar}>
+                        <NavLink className={getActiveClass} to="/main" onClick={closeNavbar}>
                             Главная
                         </NavLink>
                     </li>
@@ -48,7 +47,6 @@ export const Header = () => {
                     </li>
                 </ul>
             </nav>
-            
         </header>
     );
 };
