@@ -5,3 +5,8 @@
     justify-content: center;
     gap: 100px;
 }
+@media (max-width: 560px) {
+    .buttonswrapp {
+        gap: 10px;
+    }
+}
