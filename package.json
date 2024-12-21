@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "homepage": "https://galagrin.github.io/Vocabulary-on-React/",
-    "proxy": "http://itgirlschool.justmakeit.ru",
+    "proxy": "https://itgirlschool.justmakeit.ru",
     "dependencies": {
         "@babel/plugin-proposal-private-property-in-object": "^7.14.5",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
