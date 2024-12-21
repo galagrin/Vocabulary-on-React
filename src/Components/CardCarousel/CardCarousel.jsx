@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import Card from '../Card/Card';
-import { Button } from '../Button/Button';
-import { Modal } from '../Modal/Modal';
-import { observer } from 'mobx-react-lite';
-import wordsStore from '../../store/WordsStore.js';
+import { useEffect, useState } from "react";
+import Card from "../Card/Card";
+import { Button } from "../Button/Button";
+import { Modal } from "../Modal/Modal";
+import { observer } from "mobx-react-lite";
+import wordsStore from "../../store/WordsStore.js";
 
-import { Counter } from './Counter/Counter';
-import { Loader } from '../Loader/Loader.jsx';
-import './CardCarousel.css';
+import { Counter } from "./Counter/Counter";
+import { Loader } from "../Loader/Loader.jsx";
+import "./CardCarousel.css";
 
 export const CardCarousel = observer(() => {
     const [wordIndex, setWordIndex] = useState(0);
@@ -21,7 +21,7 @@ export const CardCarousel = observer(() => {
 
     // достаем количество изученных слов из localStorage
     useEffect(() => {
-        setCount(JSON.parse(localStorage.getItem('usedId')));
+        setCount(JSON.parse(localStorage.getItem("usedId")));
     }, []);
 
     // переворот карточки
@@ -43,7 +43,9 @@ export const CardCarousel = observer(() => {
     const handlePrevWord = () => {
         setRolledOut(true);
         setTimeout(() => setRolledOut(false), 500);
-        setWordIndex((wordIndex) => (wordIndex - 1 + wordsData.length) % wordsData.length);
+        setWordIndex(
+            (wordIndex) => (wordIndex - 1 + wordsData.length) % wordsData.length
+        );
         setFlipped(false);
     };
 
@@ -56,7 +58,7 @@ export const CardCarousel = observer(() => {
             setCount((prevCount) => prevCount + 1);
             setUsedIds((prevUsedIds) => [...prevUsedIds, currentId]);
             // записываем количество изученных слов в localStorage
-            localStorage.setItem('usedId', JSON.stringify(count + 1));
+            localStorage.setItem("usedId", JSON.stringify(count + 1));
         }
     };
 
@@ -71,14 +73,26 @@ export const CardCarousel = observer(() => {
     return (
         <div className="cardwrapper">
             <div className="modal-container">
-                <div className="modal-showbtn" onClick={() => setModalInfoOpen(true)}>
-                    <img src="./images/icon-info.svg" alt="информация" />
+                <div
+                    className="modal-showbtn"
+                    onClick={() => setModalInfoOpen(true)}
+                >
+                    <img
+                        src={`${process.env.PUBLIC_URL}/images/icon-info.svg`}
+                        alt="информация"
+                    />
                 </div>
 
-                <Modal isOpen={modalInfoOpen} onClose={() => setModalInfoOpen(false)}>
+                <Modal
+                    isOpen={modalInfoOpen}
+                    onClose={() => setModalInfoOpen(false)}
+                >
                     <p>
-                        Изучайте слова, использую кнопки Вперед и Назад. При просмотре перевода слова оно будет засчитано как изученное. Количество
-                        изученных слов указаны под карточкой в счетчике. Сбрасывайте счетчик нажатием на корзину рядом с ним.
+                        Изучайте слова, использую кнопки Вперед и Назад. При
+                        просмотре перевода слова оно будет засчитано как
+                        изученное. Количество изученных слов указаны под
+                        карточкой в счетчике. Сбрасывайте счетчик нажатием на
+                        корзину рядом с ним.
                     </p>
                 </Modal>
             </div>
@@ -93,9 +107,19 @@ export const CardCarousel = observer(() => {
                 flipped={flipped}
             />
             <div className="buttonswrapp">
-                <Button className="prev-btn" onClick={handlePrevWord} text="Назад" />
-                <p className="counter">{`${parseInt(wordIndex) + 1} из ${wordsData.length}`}</p>
-                <Button className="next-btn" onClick={handleNextWord} text="Вперед" />
+                <Button
+                    className="prev-btn"
+                    onClick={handlePrevWord}
+                    text="Назад"
+                />
+                <p className="counter">{`${parseInt(wordIndex) + 1} из ${
+                    wordsData.length
+                }`}</p>
+                <Button
+                    className="next-btn"
+                    onClick={handleNextWord}
+                    text="Вперед"
+                />
             </div>
 
             <Counter count={count} onClick={handleResetWordsCount} />

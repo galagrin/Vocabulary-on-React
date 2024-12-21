@@ -4,7 +4,7 @@ function Footer() {
     return (
         <footer className="footer">
             <img
-                src="/images/catcoffee.png"
+                src={`${process.env.PUBLIC_URL}/images/catcoffee.png`}
                 alt="картинка котенок и кофе"
                 className="footerlogo"
             />

@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
-import './header.css';
-import { Hamburger } from '../Hamburger/Hamberger';
+import "./header.css";
+import { Hamburger } from "../Hamburger/Hamberger";
 
 export const Header = () => {
     const [showNavbar, setShowNavbar] = useState(false);
@@ -15,13 +15,18 @@ export const Header = () => {
     };
 
     const getActiveClass = ({ isActive }) => {
-        return isActive ? `${'active'} ${'link'}` : 'link';
+        return isActive ? `${"active"} ${"link"}` : "link";
     };
 
     return (
         <header className="header">
             <div className="logowrapper">
-                <img src="/images/catlogo.png" alt="Logo" className="headerlogo" />
+                <img
+                    src={`${process.env.PUBLIC_URL}/images/catlogo.png`}
+                    alt="Logo"
+                    className="headerlogo"
+                />
+
                 <div className="headername">Morning Cup of English</div>
             </div>
 
@@ -29,19 +34,31 @@ export const Header = () => {
                 <div className="menu-icon" onClick={handleShowNavbar}>
                     <Hamburger />
                 </div>
-                <ul className={`navlist ${showNavbar && 'active'}`}>
+                <ul className={`navlist ${showNavbar && "active"}`}>
                     <li>
-                        <NavLink className={getActiveClass} to="/main" onClick={closeNavbar}>
+                        <NavLink
+                            className={getActiveClass}
+                            to="/main"
+                            onClick={closeNavbar}
+                        >
                             Главная
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink className={getActiveClass} to="/game" onClick={closeNavbar}>
+                        <NavLink
+                            className={getActiveClass}
+                            to="/game"
+                            onClick={closeNavbar}
+                        >
                             Учить слова
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink className={getActiveClass} to="/random" onClick={closeNavbar}>
+                        <NavLink
+                            className={getActiveClass}
+                            to="/random"
+                            onClick={closeNavbar}
+                        >
                             Случайное слово
                         </NavLink>
                     </li>

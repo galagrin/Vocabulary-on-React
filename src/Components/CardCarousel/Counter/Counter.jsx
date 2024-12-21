@@ -1,4 +1,4 @@
-import './Counter.css';
+import "./Counter.css";
 
 export const Counter = ({ count, onClick }) => {
     return (
@@ -6,7 +6,10 @@ export const Counter = ({ count, onClick }) => {
             <div className="counter-container">
                 <p>количество изученный слов: {count}</p>
                 <div onClick={onClick} role="button">
-                    <img src="./images/icon-trash.svg" alt="кнопка сброса счетчика" />
+                    <img
+                        src={`${process.env.PUBLIC_URL}/images/icon-trash.svg`}
+                        alt="кнопка сброса счетчика"
+                    />
                 </div>
             </div>
         </>
