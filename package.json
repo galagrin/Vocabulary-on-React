@@ -2,7 +2,7 @@
     "name": "vocabulary",
     "version": "0.1.0",
     "private": true,
-    "homepage": "",
+    "homepage": "https://galagrin.github.io/Vocabulary-on-React/",
     "proxy": "http://itgirlschool.justmakeit.ru",
     "dependencies": {
         "@babel/plugin-proposal-private-property-in-object": "^7.14.5",
@@ -71,7 +71,7 @@
         "start": "node scripts/start.js",
         "build": "node scripts/build.js",
         "test": "node scripts/test.js",
-        "deploy": "gh-pages -d dist"
+        "deploy": "gh-pages -d build"
     },
     "eslintConfig": {
         "extends": [
