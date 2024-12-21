@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/Vocabulary-on-React/static/css/main.0b14d17e.css",
-    "main.js": "/Vocabulary-on-React/static/js/main.9d805338.js",
+    "main.js": "/Vocabulary-on-React/static/js/main.ddbe0063.js",
     "static/media/NunitoSans.ttf": "/Vocabulary-on-React/static/media/NunitoSans.61b71ee93d55d9bddead.ttf",
     "static/media/MightyKingdom.ttf": "/Vocabulary-on-React/static/media/MightyKingdom.4c19180ab15bc4a09b6e.ttf",
     "index.html": "/Vocabulary-on-React/index.html",
     "static/media/icon-close.svg": "/Vocabulary-on-React/static/media/icon-close.62d542d8225e9ae56794bdce0b546338.svg",
     "main.0b14d17e.css.map": "/Vocabulary-on-React/static/css/main.0b14d17e.css.map",
-    "main.9d805338.js.map": "/Vocabulary-on-React/static/js/main.9d805338.js.map"
+    "main.ddbe0063.js.map": "/Vocabulary-on-React/static/js/main.ddbe0063.js.map"
   },
   "entrypoints": [
     "static/css/main.0b14d17e.css",
-    "static/js/main.9d805338.js"
+    "static/js/main.ddbe0063.js"
   ]
 }
